@@ -1,3 +1,6 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
+
+
+<img src={require("img/hiragana/" + actualKana?.nombre + '.png')}/>
