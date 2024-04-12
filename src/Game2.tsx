@@ -204,8 +204,8 @@ type FraseTest = {
 };
 
 let Game2: React.FC = () => {
-	let [maxTamanio, setMaxTamanio] = useState<number>(5);
-	let [noJuegos, setNoJuegos] = useState<number>(3);
+	let [maxTamanio, setMaxTamanio] = useState<number>(6);
+	let [noJuegos, setNoJuegos] = useState<number>(10);
 	let cntJuegos = useRef<number>(0);
 	let [started, setStarted] = useState<boolean>(false);
 	let [endScreen, setEndScreen] = useState<boolean>(false);
