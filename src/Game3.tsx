@@ -198,29 +198,30 @@ const kanas: Kana[] = [
 	},
 ];
 
-type FraseTest = {
+type KanaTest = {
 	hiragana: string;
 	romaji: string;
 };
 
 let Game2: React.FC = () => {
-	let [maxTamanio, setMaxTamanio] = useState<number>(6);
 	let [noJuegos, setNoJuegos] = useState<number>(10);
 	let cntJuegos = useRef<number>(0);
 	let [started, setStarted] = useState<boolean>(false);
 	let [endScreen, setEndScreen] = useState<boolean>(false);
 	let startTime = useRef<number>(0.0);
 	let endTime = useRef<number>(0.0);
-	let [fraseTest, setFraseTest] = useState<FraseTest | undefined>();
+	let [kanasTest, setKanasTest] = useState<KanaTest[] | undefined>();
 	let [resueltoActual, setResueltoActual] = useState<boolean>(false);
-	let [solucion, setSolucion] = useState<string>("");
+	let blackList = useRef<KanaTest[]>([]);
 
 	let iniciarJuego = () => {
-		if(noJuegos <= 0 || maxTamanio <= 0) return;
+		if (noJuegos <= 0) return;
+		blackList.current = [];
 		cntJuegos.current = 0;
 		startTime.current = performance.now();
 		if (endScreen) setEndScreen(false);
-		siguienteFrase();
+		setResueltoActual(false);
+		siguientesKanas();
 		setStarted(true);
 	};
 
@@ -230,30 +231,52 @@ let Game2: React.FC = () => {
 		setEndScreen(true);
 	};
 
-	let siguienteFrase = () => {
-		setSolucion("");
+	let siguientesKanas = () => {
 		setResueltoActual(false);
 
+		
 		if (cntJuegos.current >= noJuegos) {
 			finalizarJuego();
 			return;
+		} 
+
+		if(blackList.current.length >= kanas.length){
+			finalizarJuego();
+			return;
 		}
+
+		 
 		cntJuegos.current += 1;
 		let sizeKanaList = kanas.length;
-		let hiragana = "";
-		let romaji = "";
-		let randomWordSize = 1 + Math.floor(Math.random() * (maxTamanio - 1));
-		for (let x = 0; x < randomWordSize; x++) {
-			let randomKana = Math.floor(Math.random() * sizeKanaList);
-			let kana = kanas[randomKana];
-			hiragana += kana.hiragana;
-			romaji += kana.romaji;
+		let arregloKanas: KanaTest[] = [];
+		let randomKana = Math.floor(Math.random() * sizeKanaList);
+
+		let checkeoDeBlacklist = (kana: Kana):boolean => {
+			for (let x of blackList.current){
+				if(kana.romaji === x.romaji) return true;
+			}
+			return false;
 		}
-		let newFrase: FraseTest = {
-			hiragana: hiragana,
-			romaji: romaji,
-		};
-		setFraseTest(newFrase);
+		
+		while(checkeoDeBlacklist(kanas[randomKana])){
+			console.log(randomKana);
+			randomKana = Math.floor(Math.random() * sizeKanaList);
+		}
+		
+		arregloKanas.push(kanas[randomKana]);
+		blackList.current.push(kanas[randomKana]);
+		//Checo si hay más Kanas que suenen igual.
+		kanas.forEach((kana) => {
+			if (
+				kana.romaji === arregloKanas[0].romaji &&
+				kana.hiragana !== arregloKanas[0].hiragana
+			) {
+				arregloKanas.push(kana);
+				blackList.current.push(kanas[randomKana]);
+			}
+		});
+
+		setKanasTest(arregloKanas);
 	};
 
 	let getTiempo = (): string => {
@@ -273,12 +296,12 @@ let Game2: React.FC = () => {
 
 	const presionarEnter = (e: KeyboardEvent) => {
 		if (e.key !== "Enter") return;
-		console.log("ENTER");
 		if (!started) {
 			iniciarJuego();
-		}
-		if (resueltoActual) {
-			siguienteFrase();
+		}else if (resueltoActual) {
+			siguientesKanas();
+		}else{
+			setResueltoActual(true);
 		}
 	};
 	let refPresionarEnter = useRef<Function>(presionarEnter);
@@ -308,12 +331,19 @@ let Game2: React.FC = () => {
 	return (
 		<div>
 			{!started ? (
-				<div style={{position: "relative"}}>
+				<div style={{ position: "relative" }}>
 					<h1 style={{ textDecoration: "underline" }}>
-						Creador de Frases.
+						Sonido a Kana.
 					</h1>
 					{endScreen ? (
-						<h2 style={{ position: "absolute", left: "-100%", right: "-100%", top: "15%" }}>
+						<h2
+							style={{
+								position: "absolute",
+								left: "-100%",
+								right: "-100%",
+								top: "15%",
+							}}
+						>
 							Tiempo de ejecución: {getTiempo()}
 						</h2>
 					) : (
@@ -323,38 +353,22 @@ let Game2: React.FC = () => {
 						container
 						style={{ marginTop: "12%", padding: "0 20% 0 20%" }}
 					>
-						<Grid item xs={6}>
+						<Grid item xs={12}>
 							<TextField
 								label="Número de Juegos"
 								size="small"
 								style={{ width: "180px" }}
 								value={noJuegos}
-								onChange={(e)=>{
+								onChange={(e) => {
 									let number = e.target.value;
 									const re = /^[0-9]*$/;
-									if(re.test(number)){
+									if (re.test(number)) {
 										setNoJuegos(Number(number));
 									}
 								}}
 							/>
 						</Grid>
-						<Grid item xs={6}>
-							<TextField
-								label="Número Máx Kanas"
-								size="small"
-								style={{ width: "180px" }}
-								value={maxTamanio}
-								onChange={(e)=>{
-									let number = e.target.value;
-									const re = /^[0-9]*$/;
-									if(re.test(number)){
-										setMaxTamanio(Number(number));
-									}
-								}}
-							/>
-						</Grid>
 					</Grid>
-
 					<Button
 						style={{ marginTop: "50px" }}
 						size="large"
@@ -368,12 +382,12 @@ let Game2: React.FC = () => {
 				<Grid
 					container
 					spacing={0}
-					style={{ height: "50vh" }}
+					style={{ height: "40vh" }}
 					alignItems={"center"}
 					justifyContent={"center"}
 				>
 					<Grid item xs={12}>
-						<h1>{fraseTest?.hiragana}</h1>
+						<h1 style={{transform: 'scale(1.5)'}}>{kanasTest ? kanasTest[0].romaji : ""}</h1>
 					</Grid>
 					<Grid
 						item
@@ -384,20 +398,40 @@ let Game2: React.FC = () => {
 						}}
 					></Grid>
 					<Grid item xs={12} style={{}}>
-						<FocusableText
-							disabled={resueltoActual}
-							fraseTest={fraseTest}
-							setResueltoActual={setResueltoActual}
-							solucion={solucion}
-							setSolucion={setSolucion}
-						></FocusableText>
+						<div 
+						style={{display: 'inline-block', transform: "scale(1.4)", filter: (!resueltoActual)?"blur(8px)":""}}
+						onClick={()=>{
+							setResueltoActual(true);
+						}}
+						>
+							{kanasTest ? (
+								kanasTest.map((kana) => {
+									return (
+										<>
+											<h1
+												style={{
+													display: "inline-block",
+													borderStyle: "solid",
+													marginLeft: "5px",
+													marginRight: "5px"
+												}}
+											>
+												{kana.hiragana}
+											</h1>
+										</>
+									);
+								})
+							) : (
+								<></>
+							)}
+						</div>
 					</Grid>
 					<Grid item xs={12} style={{}}>
 						<Button
-							style={{ marginTop: "5px" }}
+							style={{ marginTop: "0px" }}
 							size="small"
 							variant="contained"
-							onClick={siguienteFrase}
+							onClick={siguientesKanas}
 							disabled={!resueltoActual}
 						>
 							Siguiente
@@ -409,46 +443,3 @@ let Game2: React.FC = () => {
 	);
 };
 export default Game2;
-
-type PropsFocusabletext = {
-	disabled: boolean;
-	fraseTest: FraseTest | undefined;
-	setResueltoActual: React.Dispatch<React.SetStateAction<boolean>>;
-	solucion: string;
-	setSolucion: React.Dispatch<React.SetStateAction<string>>;
-};
-
-let FocusableText: React.FC<PropsFocusabletext> = ({
-	disabled,
-	fraseTest,
-	setResueltoActual,
-	solucion,
-	setSolucion,
-}) => {
-	return (
-		<TextField
-			label="Solución"
-			margin="none"
-			size="small"
-			style={{ width: "300px" }}
-			disabled={disabled}
-			onChange={(e) => {
-				let txt = e.target.value.trim().toUpperCase();
-
-				//Excepción para FU-HU
-				if (fraseTest?.romaji.includes("FU")) {
-					let respuesta1 = fraseTest.romaji;
-					let respuesta2 = fraseTest.romaji.replaceAll("FU", "HU");
-					if (txt === respuesta1 || txt === respuesta2) {
-						setResueltoActual(true);
-					}
-				} else if (txt === fraseTest?.romaji) {
-					setResueltoActual(true);
-				}
-				setSolucion(e.target.value);
-			}}
-			value={solucion}
-			inputRef={(input) => input && input.focus()}
-		/>
-	);
-};
