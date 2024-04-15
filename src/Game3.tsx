@@ -1,227 +1,26 @@
 import { Button, Grid, TextField } from "@mui/material";
 import { relative } from "path";
 import React, { useEffect, useRef, useState } from "react";
-
-type Kana = {
-	hiragana: string;
-	romaji: string;
-};
-
-const kanas: Kana[] = [
-	{
-		hiragana: "あ",
-		romaji: "A",
-	},
-	{
-		hiragana: "か",
-		romaji: "KA",
-	},
-	{
-		hiragana: "さ",
-		romaji: "SA",
-	},
-	{
-		hiragana: "た",
-		romaji: "TA",
-	},
-	{
-		hiragana: "な",
-		romaji: "NA",
-	},
-	{
-		hiragana: "は",
-		romaji: "HA",
-	},
-	{
-		hiragana: "ま",
-		romaji: "MA",
-	},
-	{
-		hiragana: "ら",
-		romaji: "RA",
-	},
-	{
-		hiragana: "や",
-		romaji: "YA",
-	},
-	{
-		hiragana: "い",
-		romaji: "I",
-	},
-	{
-		hiragana: "き",
-		romaji: "KI",
-	},
-	{
-		hiragana: "し",
-		romaji: "SHI",
-	},
-	{
-		hiragana: "ち",
-		romaji: "CHI",
-	},
-	{
-		hiragana: "ひ",
-		romaji: "HI",
-	},
-	{
-		hiragana: "み",
-		romaji: "MI",
-	},
-	{
-		hiragana: "り",
-		romaji: "RI",
-	},
-	{
-		hiragana: "う",
-		romaji: "U",
-	},
-	{
-		hiragana: "く",
-		romaji: "KU",
-	},
-	{
-		hiragana: "す",
-		romaji: "SU",
-	},
-	{
-		hiragana: "つ",
-		romaji: "TSU",
-	},
-	{
-		hiragana: "ぬ",
-		romaji: "NU",
-	},
-	{
-		hiragana: "ふ",
-		romaji: "FU",
-	},
-	{
-		hiragana: "む",
-		romaji: "MU",
-	},
-	{
-		hiragana: "る",
-		romaji: "RU",
-	},
-	{
-		hiragana: "ゆ",
-		romaji: "YU",
-	},
-	{
-		hiragana: "え",
-		romaji: "E",
-	},
-	{
-		hiragana: "け",
-		romaji: "KE",
-	},
-	{
-		hiragana: "せ",
-		romaji: "SE",
-	},
-	{
-		hiragana: "て",
-		romaji: "TE",
-	},
-	{
-		hiragana: "ね",
-		romaji: "NE",
-	},
-	{
-		hiragana: "へ",
-		romaji: "HE",
-	},
-	{
-		hiragana: "め",
-		romaji: "ME",
-	},
-	{
-		hiragana: "れ",
-		romaji: "RE",
-	},
-	{
-		hiragana: "お",
-		romaji: "O",
-	},
-	{
-		hiragana: "こ",
-		romaji: "KO",
-	},
-	{
-		hiragana: "そ",
-		romaji: "SO",
-	},
-	{
-		hiragana: "と",
-		romaji: "TO",
-	},
-	{
-		hiragana: "の",
-		romaji: "NO",
-	},
-	{
-		hiragana: "ほ",
-		romaji: "HO",
-	},
-	{
-		hiragana: "も",
-		romaji: "MO",
-	},
-	{
-		hiragana: "ろ",
-		romaji: "RO",
-	},
-	{
-		hiragana: "よ",
-		romaji: "YO",
-	},
-	{
-		hiragana: "わ",
-		romaji: "WA",
-	},
-	{
-		hiragana: "を",
-		romaji: "WO",
-	},
-	{
-		hiragana: "ん",
-		romaji: "N",
-	},
-	{
-		hiragana: "ゐ",
-		romaji: "WI",
-	},
-	{
-		hiragana: "ゑ",
-		romaji: "WE",
-	},
-];
-
-type KanaTest = {
-	hiragana: string;
-	romaji: string;
-};
+import { Kanas, Kana } from "./Kanas";
 
 let Game2: React.FC = () => {
 	let [noJuegos, setNoJuegos] = useState<number>(10);
-	let cntJuegos = useRef<number>(0);
 	let [started, setStarted] = useState<boolean>(false);
 	let [endScreen, setEndScreen] = useState<boolean>(false);
 	let startTime = useRef<number>(0.0);
 	let endTime = useRef<number>(0.0);
-	let [kanasTest, setKanasTest] = useState<KanaTest[] | undefined>();
+	let juegos = useRef<Kana[][]>();
+	let [kanasTest, setKanasTest] = useState<Kana[] | undefined>();
 	let [resueltoActual, setResueltoActual] = useState<boolean>(false);
-	let blackList = useRef<KanaTest[]>([]);
 
 	let iniciarJuego = () => {
 		if (noJuegos <= 0) return;
-		blackList.current = [];
-		cntJuegos.current = 0;
+		juegos.current = [];
 		startTime.current = performance.now();
 		if (endScreen) setEndScreen(false);
 		setResueltoActual(false);
-		siguientesKanas();
+		cargarJuegos();
+		siguientesJuego();
 		setStarted(true);
 	};
 
@@ -231,52 +30,48 @@ let Game2: React.FC = () => {
 		setEndScreen(true);
 	};
 
-	let siguientesKanas = () => {
-		setResueltoActual(false);
-
-		
-		if (cntJuegos.current >= noJuegos) {
-			finalizarJuego();
-			return;
-		} 
-
-		if(blackList.current.length >= kanas.length){
-			finalizarJuego();
-			return;
-		}
-
-		 
-		cntJuegos.current += 1;
-		let sizeKanaList = kanas.length;
-		let arregloKanas: KanaTest[] = [];
-		let randomKana = Math.floor(Math.random() * sizeKanaList);
-
-		let checkeoDeBlacklist = (kana: Kana):boolean => {
-			for (let x of blackList.current){
-				if(kana.romaji === x.romaji) return true;
-			}
-			return false;
-		}
-		
-		while(checkeoDeBlacklist(kanas[randomKana])){
-			console.log(randomKana);
-			randomKana = Math.floor(Math.random() * sizeKanaList);
-		}
-		
-		arregloKanas.push(kanas[randomKana]);
-		blackList.current.push(kanas[randomKana]);
-		//Checo si hay más Kanas que suenen igual.
-		kanas.forEach((kana) => {
-			if (
-				kana.romaji === arregloKanas[0].romaji &&
-				kana.hiragana !== arregloKanas[0].hiragana
-			) {
-				arregloKanas.push(kana);
-				blackList.current.push(kanas[randomKana]);
-			}
+	let cargarJuegos = () => {
+		//Copio Kanas en nueva lista.
+		let copyKanas: Kana[] = [];
+		Kanas.forEach((kana) => {
+			copyKanas.push(kana);
 		});
 
-		setKanasTest(arregloKanas);
+		//Array de juegos.
+		let arrayJuegos: Kana[][] = [];
+
+		//Genero juegos.
+		for (let x = 0; x < noJuegos; x++) {
+			if (copyKanas.length <= 0) break;
+			let arraySimilarKanas: Kana[] = [];
+			let idRandomKana = Math.floor(Math.random() * copyKanas.length);
+			let randomKana = copyKanas.splice(idRandomKana, 1)[0];
+			arraySimilarKanas.push(randomKana);
+			for (let y = 0; y < copyKanas.length; y++) {
+				if (copyKanas[y].romaji === randomKana.romaji) {
+					let anotherRandomKana = copyKanas.splice(y, 1)[0];
+					arraySimilarKanas.push(anotherRandomKana);
+					y--;
+				}
+			}
+			arrayJuegos.push(arraySimilarKanas);
+		}
+		juegos.current = arrayJuegos;
+	};
+
+	let siguientesJuego = () => {
+		setResueltoActual(false);
+
+		if (juegos.current) {
+			if (juegos.current.length <= 0) {
+				finalizarJuego();
+				return;
+			}
+		}
+
+		let siguienteJuego: Kana[] | undefined = juegos.current?.pop();
+
+		setKanasTest(siguienteJuego);
 	};
 
 	let getTiempo = (): string => {
@@ -294,13 +89,25 @@ let Game2: React.FC = () => {
 		);
 	};
 
+	let imprimeRomajis= (romajis: string[]): string => {
+		if(romajis.length === 0){
+			return "";
+		}else if(romajis.length === 1){
+			return romajis[0];
+		}else if (romajis.length === 2){
+			return "" + romajis[0] + " - " + romajis[1];
+		}
+
+		return "TO-DO configurar valores mayores a 2.";
+	}
+
 	const presionarEnter = (e: KeyboardEvent) => {
 		if (e.key !== "Enter") return;
 		if (!started) {
 			iniciarJuego();
-		}else if (resueltoActual) {
-			siguientesKanas();
-		}else{
+		} else if (resueltoActual) {
+			siguientesJuego();
+		} else {
 			setResueltoActual(true);
 		}
 	};
@@ -387,7 +194,9 @@ let Game2: React.FC = () => {
 					justifyContent={"center"}
 				>
 					<Grid item xs={12}>
-						<h1 style={{transform: 'scale(1.5)'}}>{kanasTest ? kanasTest[0].romaji : ""}</h1>
+						<h1 style={{ transform: "scale(1.5)" }}>
+							{kanasTest ? imprimeRomajis(kanasTest[0].romaji) : ""}
+						</h1>
 					</Grid>
 					<Grid
 						item
@@ -398,26 +207,22 @@ let Game2: React.FC = () => {
 						}}
 					></Grid>
 					<Grid item xs={12} style={{}}>
-						<div 
-						style={{display: 'inline-block', transform: "scale(1.4)", filter: (!resueltoActual)?"blur(8px)":""}}
-						onClick={()=>{
-							setResueltoActual(true);
-						}}
+						<div
+							style={{
+								display: "inline-block",
+								transform: "scale(1.4)",
+								filter: !resueltoActual ? "blur(8px)" : "",
+							}}
+							onClick={() => {
+								setResueltoActual(true);
+							}}
 						>
 							{kanasTest ? (
 								kanasTest.map((kana) => {
 									return (
 										<>
-											<h1
-												style={{
-													display: "inline-block",
-													borderStyle: "solid",
-													marginLeft: "5px",
-													marginRight: "5px"
-												}}
-											>
-												{kana.hiragana}
-											</h1>
+											{(kana.hiragana)?<InlineGrafo>{kana.hiragana}</InlineGrafo>:""}
+											{(kana.katakana)?<InlineGrafo>{kana.katakana}</InlineGrafo>:""}
 										</>
 									);
 								})
@@ -431,7 +236,7 @@ let Game2: React.FC = () => {
 							style={{ marginTop: "0px" }}
 							size="small"
 							variant="contained"
-							onClick={siguientesKanas}
+							onClick={siguientesJuego}
 							disabled={!resueltoActual}
 						>
 							Siguiente
@@ -443,3 +248,19 @@ let Game2: React.FC = () => {
 	);
 };
 export default Game2;
+
+
+let InlineGrafo: React.FC<{children: React.ReactNode}> = ({ children })=>{
+	return(
+		<h1
+		style={{
+			display: "inline-block",
+			borderStyle: "solid",
+			marginLeft: "5px",
+			marginRight: "5px",
+		}}
+	>
+		{children}
+	</h1>
+	);
+}

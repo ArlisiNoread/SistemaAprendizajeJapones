@@ -1,206 +1,18 @@
-import { Button, Grid, TextField } from "@mui/material";
+import {
+	Button,
+	Checkbox,
+	FormControlLabel,
+	FormGroup,
+	Grid,
+	TextField,
+} from "@mui/material";
 import { relative } from "path";
 import React, { useEffect, useRef, useState } from "react";
-
-type Kana = {
-	hiragana: string;
-	romaji: string;
-};
-
-const kanas: Kana[] = [
-	{
-		hiragana: "あ",
-		romaji: "A",
-	},
-	{
-		hiragana: "か",
-		romaji: "KA",
-	},
-	{
-		hiragana: "さ",
-		romaji: "SA",
-	},
-	{
-		hiragana: "た",
-		romaji: "TA",
-	},
-	{
-		hiragana: "な",
-		romaji: "NA",
-	},
-	{
-		hiragana: "は",
-		romaji: "HA",
-	},
-	{
-		hiragana: "ま",
-		romaji: "MA",
-	},
-	{
-		hiragana: "ら",
-		romaji: "RA",
-	},
-	{
-		hiragana: "や",
-		romaji: "YA",
-	},
-	{
-		hiragana: "い",
-		romaji: "I",
-	},
-	{
-		hiragana: "き",
-		romaji: "KI",
-	},
-	{
-		hiragana: "し",
-		romaji: "SHI",
-	},
-	{
-		hiragana: "ち",
-		romaji: "CHI",
-	},
-	{
-		hiragana: "ひ",
-		romaji: "HI",
-	},
-	{
-		hiragana: "み",
-		romaji: "MI",
-	},
-	{
-		hiragana: "り",
-		romaji: "RI",
-	},
-	{
-		hiragana: "う",
-		romaji: "U",
-	},
-	{
-		hiragana: "く",
-		romaji: "KU",
-	},
-	{
-		hiragana: "す",
-		romaji: "SU",
-	},
-	{
-		hiragana: "つ",
-		romaji: "TSU",
-	},
-	{
-		hiragana: "ぬ",
-		romaji: "NU",
-	},
-	{
-		hiragana: "ふ",
-		romaji: "FU",
-	},
-	{
-		hiragana: "む",
-		romaji: "MU",
-	},
-	{
-		hiragana: "る",
-		romaji: "RU",
-	},
-	{
-		hiragana: "ゆ",
-		romaji: "YU",
-	},
-	{
-		hiragana: "え",
-		romaji: "E",
-	},
-	{
-		hiragana: "け",
-		romaji: "KE",
-	},
-	{
-		hiragana: "せ",
-		romaji: "SE",
-	},
-	{
-		hiragana: "て",
-		romaji: "TE",
-	},
-	{
-		hiragana: "ね",
-		romaji: "NE",
-	},
-	{
-		hiragana: "へ",
-		romaji: "HE",
-	},
-	{
-		hiragana: "め",
-		romaji: "ME",
-	},
-	{
-		hiragana: "れ",
-		romaji: "RE",
-	},
-	{
-		hiragana: "お",
-		romaji: "O",
-	},
-	{
-		hiragana: "こ",
-		romaji: "KO",
-	},
-	{
-		hiragana: "そ",
-		romaji: "SO",
-	},
-	{
-		hiragana: "と",
-		romaji: "TO",
-	},
-	{
-		hiragana: "の",
-		romaji: "NO",
-	},
-	{
-		hiragana: "ほ",
-		romaji: "HO",
-	},
-	{
-		hiragana: "も",
-		romaji: "MO",
-	},
-	{
-		hiragana: "ろ",
-		romaji: "RO",
-	},
-	{
-		hiragana: "よ",
-		romaji: "YO",
-	},
-	{
-		hiragana: "わ",
-		romaji: "WA",
-	},
-	{
-		hiragana: "を",
-		romaji: "WO",
-	},
-	{
-		hiragana: "ん",
-		romaji: "N",
-	},
-	{
-		hiragana: "ゐ",
-		romaji: "WI",
-	},
-	{
-		hiragana: "ゑ",
-		romaji: "WE",
-	},
-];
+import { Kanas, Kana } from "./Kanas";
 
 type FraseTest = {
-	hiragana: string;
-	romaji: string;
+	caracteresJaponeses: string;
+	romajis: string[];
 };
 
 let Game2: React.FC = () => {
@@ -214,9 +26,12 @@ let Game2: React.FC = () => {
 	let [fraseTest, setFraseTest] = useState<FraseTest | undefined>();
 	let [resueltoActual, setResueltoActual] = useState<boolean>(false);
 	let [solucion, setSolucion] = useState<string>("");
+	let [hiragana, setHiragana] = useState<boolean>(true);
+	let [katakana, setKatakana] = useState<boolean>(true);
 
 	let iniciarJuego = () => {
-		if(noJuegos <= 0 || maxTamanio <= 0) return;
+		if (!hiragana && !katakana) return;
+		if (noJuegos <= 0 || maxTamanio <= 0) return;
 		cntJuegos.current = 0;
 		startTime.current = performance.now();
 		if (endScreen) setEndScreen(false);
@@ -239,19 +54,40 @@ let Game2: React.FC = () => {
 			return;
 		}
 		cntJuegos.current += 1;
-		let sizeKanaList = kanas.length;
-		let hiragana = "";
-		let romaji = "";
+		let sizeKanaList = Kanas.length;
+		let caracteresJaponeses = "";
+		let romajis: string[] = [];
 		let randomWordSize = 1 + Math.floor(Math.random() * (maxTamanio - 1));
 		for (let x = 0; x < randomWordSize; x++) {
 			let randomKana = Math.floor(Math.random() * sizeKanaList);
-			let kana = kanas[randomKana];
-			hiragana += kana.hiragana;
-			romaji += kana.romaji;
+			let kana = Kanas[randomKana];
+			if (kana.hiragana && kana.katakana && hiragana && katakana) {
+				caracteresJaponeses +=
+					Math.round(Math.random()) === 0
+						? kana.hiragana
+						: kana.katakana;
+			} else if (kana.hiragana && hiragana) {
+				caracteresJaponeses += kana.hiragana;
+			} else if (kana.katakana && katakana) {
+				caracteresJaponeses += kana.katakana;
+			} else {
+				x--;
+				continue;
+			}
+			if(romajis.length === 0){
+				kana.romaji.forEach((x)=>{romajis.push(x)});
+			}else{
+				let newRomajis: string[] = [];
+				for(let romaji of kana.romaji){
+					romajis.forEach((x)=>{newRomajis.push(x + romaji)});
+				}
+				romajis = newRomajis;
+			}
 		}
+		romajis.forEach((x)=>{console.log(x)});
 		let newFrase: FraseTest = {
-			hiragana: hiragana,
-			romaji: romaji,
+			caracteresJaponeses: caracteresJaponeses,
+			romajis: romajis,
 		};
 		setFraseTest(newFrase);
 	};
@@ -308,12 +144,19 @@ let Game2: React.FC = () => {
 	return (
 		<div>
 			{!started ? (
-				<div style={{position: "relative"}}>
+				<div style={{ position: "relative" }}>
 					<h1 style={{ textDecoration: "underline" }}>
 						Creador de Frases.
 					</h1>
 					{endScreen ? (
-						<h2 style={{ position: "absolute", left: "-100%", right: "-100%", top: "15%" }}>
+						<h2
+							style={{
+								position: "absolute",
+								left: "-100%",
+								right: "-100%",
+								top: "10%",
+							}}
+						>
 							Tiempo de ejecución: {getTiempo()}
 						</h2>
 					) : (
@@ -321,18 +164,44 @@ let Game2: React.FC = () => {
 					)}
 					<Grid
 						container
-						style={{ marginTop: "12%", padding: "0 20% 0 20%" }}
+						style={{ marginTop: "6%", padding: "0 20% 0 20%" }}
 					>
+						<Grid item xs={12}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={hiragana}
+										onClick={() => {
+											setHiragana(!hiragana);
+										}}
+									/>
+								}
+								label="HIRAGANA"
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={katakana}
+										onClick={() => {
+											setKatakana(!katakana);
+										}}
+									/>
+								}
+								label="KATAKANA"
+							/>
+						</Grid>
 						<Grid item xs={6}>
 							<TextField
 								label="Número de Juegos"
 								size="small"
 								style={{ width: "180px" }}
 								value={noJuegos}
-								onChange={(e)=>{
+								onChange={(e) => {
 									let number = e.target.value;
 									const re = /^[0-9]*$/;
-									if(re.test(number)){
+									if (re.test(number)) {
 										setNoJuegos(Number(number));
 									}
 								}}
@@ -344,10 +213,10 @@ let Game2: React.FC = () => {
 								size="small"
 								style={{ width: "180px" }}
 								value={maxTamanio}
-								onChange={(e)=>{
+								onChange={(e) => {
 									let number = e.target.value;
 									const re = /^[0-9]*$/;
-									if(re.test(number)){
+									if (re.test(number)) {
 										setMaxTamanio(Number(number));
 									}
 								}}
@@ -373,7 +242,7 @@ let Game2: React.FC = () => {
 					justifyContent={"center"}
 				>
 					<Grid item xs={12}>
-						<h1>{fraseTest?.hiragana}</h1>
+						<h1>{fraseTest?.caracteresJaponeses}</h1>
 					</Grid>
 					<Grid
 						item
@@ -434,17 +303,12 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 			disabled={disabled}
 			onChange={(e) => {
 				let txt = e.target.value.trim().toUpperCase();
-
-				//Excepción para FU-HU
-				if (fraseTest?.romaji.includes("FU")) {
-					let respuesta1 = fraseTest.romaji;
-					let respuesta2 = fraseTest.romaji.replaceAll("FU", "HU");
-					if (txt === respuesta1 || txt === respuesta2) {
-						setResueltoActual(true);
-					}
-				} else if (txt === fraseTest?.romaji) {
-					setResueltoActual(true);
+				if(fraseTest){
+					fraseTest.romajis.forEach((romaji)=>{
+						if(txt === romaji) setResueltoActual(true);
+					});
 				}
+
 				setSolucion(e.target.value);
 			}}
 			value={solucion}
