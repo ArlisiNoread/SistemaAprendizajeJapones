@@ -8,124 +8,124 @@ import Game2 from "./Game2";
 import Game3 from "./Game3";
 
 let appStyles: React.CSSProperties = {
-  height: "100vh",
-  display: "flex",
+	height: "100vh",
+	display: "flex",
 };
 
 function App() {
-  let [juego, setJuego] = useState<number>(0);
+	let [juego, setJuego] = useState<number>(0);
 
-  let decideJuego = (): JSX.Element => {
-    switch (juego) {
-      case 0:
-        return <Inicio setJuego={setJuego} />;
-      case 1:
-        return <Game1 />;
-      case 2:
-        return <Game2 />;
-        case 3:
-        return <Game3 />;
-      default:
-        return <p>Error.</p>;
-    }
-  };
+	let decideJuego = (): JSX.Element => {
+		switch (juego) {
+			case 0:
+				return <Inicio setJuego={setJuego} />;
+			case 1:
+				return <Game1 />;
+			case 2:
+				return <Game2 />;
+			case 3:
+				return <Game3 />;
+			default:
+				return <p>Error.</p>;
+		}
+	};
 
-  return (
-    <div style={appStyles} className="App">
-      <Grid
-        container
-        spacing={0}
-        alignItems={"center"}
-        justifyContent={"center"}
-      >
-        <Grid item justifyContent={"center"}>
-          <Card
-            style={{ textAlign: "center" }}
-            sx={{
-              width: "50vw",
-              height: "50vh",
-              position: "relative",
-            }}
-          >
-            {juego !== 0 ? (
-              <img
-                id="closeButton"
-                src={closeIcon}
-                height={"30px"}
-                style={{
-                  position: "absolute",
-                  left: "0",
-                  zIndex: "1000",
-                }}
-                onClick={() => {
-                  setJuego(0);
-                }}
-              />
-            ) : (
-              <></>
-            )}
+	return (
+		<div style={appStyles} className="App">
+			<Grid
+				container
+				spacing={0}
+				alignItems={"center"}
+				justifyContent={"center"}
+			>
+				<Grid item justifyContent={"center"}>
+					<Card
+						style={{ textAlign: "center" }}
+						sx={{
+							width: "50vw",
+							height: "50vh",
+							position: "relative",
+						}}
+					>
+						{juego !== 0 ? (
+							<img
+								id="closeButton"
+								src={closeIcon}
+								height={"30px"}
+								style={{
+									position: "absolute",
+									left: "0",
+									zIndex: "1000",
+								}}
+								onClick={() => {
+									setJuego(0);
+								}}
+							/>
+						) : (
+							<></>
+						)}
 
-            {decideJuego()}
-          </Card>
-        </Grid>
-      </Grid>
-    </div>
-  );
+						{decideJuego()}
+					</Card>
+				</Grid>
+			</Grid>
+		</div>
+	);
 }
 export default App;
 
 type PropsInicio = {
-  setJuego: React.Dispatch<React.SetStateAction<number>>;
+	setJuego: React.Dispatch<React.SetStateAction<number>>;
 };
 
 let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
-  return (
-    <div style={{ height: "100%" }}>
-      <h1 style={{ position: "absolute", left: "-100%", right: "-100%" }}>
-        Selección de Juegos.
-      </h1>
-      <Grid
-        container
-        justifyContent={"center"}
-        alignContent={"center"}
-        style={{ height: "100%" }}
-        spacing={0}
-        columnGap={10}
-      >
-        <Grid item xs={2}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => {
-              setJuego(1);
-            }}
-          >
-            HIRAGANA
-          </Button>
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => {
-              setJuego(2);
-            }}
-          >
-            Traducir
-          </Button>
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => {
-              setJuego(3);
-            }}
-          >
-            Sonido a Kana
-          </Button>
-        </Grid>
-      </Grid>
-    </div>
-  );
+	return (
+		<div style={{ height: "100%" }}>
+			<h1 style={{ position: "absolute", left: "-100%", right: "-100%" }}>
+				Selección de Juegos.
+			</h1>
+			<Grid
+				container
+				justifyContent={"center"}
+				alignContent={"center"}
+				style={{ height: "100%" }}
+				spacing={0}
+				columnGap={10}
+			>
+				<Grid item xs={2}>
+					<Button
+						variant="outlined"
+						size="large"
+						onClick={() => {
+							setJuego(1);
+						}}
+					>
+						Nemotecnias
+					</Button>
+				</Grid>
+				<Grid item xs={2}>
+					<Button
+						variant="outlined"
+						size="large"
+						onClick={() => {
+							setJuego(2);
+						}}
+					>
+						Traducir
+					</Button>
+				</Grid>
+				<Grid item xs={2}>
+					<Button
+						variant="outlined"
+						size="large"
+						onClick={() => {
+							setJuego(3);
+						}}
+					>
+						Sonido a Kana
+					</Button>
+				</Grid>
+			</Grid>
+		</div>
+	);
 };
