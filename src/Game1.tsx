@@ -306,7 +306,7 @@ const listaCompletaKatakana: ObjetoLista[] = [
 		nemotecnia: "He is saying 'HE HE HEE!'"
 	},
 	{
-		nombre: "HU-FU",
+		nombre: "FU-HU",
 		nemotecnia: "A flag that's triangle shaped."
 	},
 	{
@@ -663,7 +663,6 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 			disabled={disabled}
 			onChange={(e) => {
 				let txt = e.target.value.trim().toUpperCase();
-
 				//Excepción para FU-HU
 				if (actualKana?.objetoLista.nombre === "FU-HU") {
 					if (txt === "FU" || txt === "HU") {
