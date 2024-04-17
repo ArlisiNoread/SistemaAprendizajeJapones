@@ -1,391 +1,431 @@
 export type Kana = {
 	hiragana?: string;
 	katakana?: string;
-	romaji: string[];
+	romaji: string;
+	pronunciacion?: string;
+	minusculasHiragana?: string;
+	minusculasKatakana?: string;
 };
 
 export const Kanas: Kana[] = [
 	{
 		hiragana: "あ",
-		romaji: ["A"],
+		romaji: "A",
 		katakana: "ア",
-	},
-	{
-		hiragana: "か",
-		romaji: ["KA"],
-		katakana: "カ",
-	},
-	{
-		hiragana: "が",
-		romaji: ["GA"],
-		katakana: "ガ",
-	},
-	{
-		hiragana: "さ",
-		romaji: ["SA"],
-		katakana: "サ",
-	},
-	{
-		hiragana: "ざ",
-		romaji: ["ZA"],
-		katakana: "ザ",
-	},
-	{
-		hiragana: "た",
-		romaji: ["TA"],
-		katakana: "タ",
-	},
-	{
-		hiragana: "だ",
-		romaji: ["DA"],
-		katakana: "ダ",
-	},
-	{
-		hiragana: "な",
-		romaji: ["NA"],
-		katakana: "ナ",
-	},
-	{
-		hiragana: "は",
-		romaji: ["HA"],
-		katakana: "ハ",
-	},
-	{
-		hiragana: "ば",
-		romaji: ["BA"],
-		katakana: "バ",
-	},
-	{
-		hiragana: "ぱ",
-		romaji: ["PA"],
-		katakana: "パ",
-	},
-	{
-		hiragana: "ま",
-		romaji: ["MA"],
-		katakana: "マ",
-	},
-	{
-		hiragana: "ら",
-		romaji: ["RA"],
-		katakana: "ラ",
-	},
-	{
-		hiragana: "や",
-		romaji: ["YA"],
-		katakana: "ヤ",
+		minusculasHiragana: "ぁ",
+		minusculasKatakana: "ァ",
 	},
 	{
 		hiragana: "い",
-		romaji: ["I"],
+		romaji: "I",
 		katakana: "イ",
-	},
-	{
-		hiragana: "き",
-		romaji: ["KI"],
-		katakana: "キ",
-	},
-	{
-		hiragana: "ぎ",
-		romaji: ["GI"],
-		katakana: "キ",
-	},
-	{
-		hiragana: "し",
-		romaji: ["SHI"],
-		katakana: "シ",
-	},
-	{
-		hiragana: "じ",
-		romaji: ["JI"],
-		katakana: "ジ",
-	},
-	{
-		hiragana: "ち",
-		romaji: ["CHI"],
-		katakana: "チ",
-	},
-	{
-		hiragana: "ぢ",
-		romaji: ["JI", "DI"],
-		katakana: "ヂ",
-	},
-	{
-		hiragana: "ひ",
-		romaji: ["HI"],
-		katakana: "ヒ",
-	},
-	{
-		hiragana: "び",
-		romaji: ["BI"],
-		katakana: "ビ",
-	},
-	{
-		hiragana: "ぴ",
-		romaji: ["PI"],
-		katakana: "ピ",
-	},
-	{
-		hiragana: "み",
-		romaji: ["MI"],
-		katakana: "ミ",
-	},
-	{
-		hiragana: "り",
-		romaji: ["RI"],
-		katakana: "リ",
+		minusculasHiragana: "ぃ",
+		minusculasKatakana: "ィ"
 	},
 	{
 		hiragana: "う",
-		romaji: ["U"],
+		romaji: "U",
 		katakana: "ウ",
-	},
-	{
-		hiragana: "く",
-		romaji: ["KU"],
-		katakana: "ク",
-	},
-	{
-		hiragana: "ぐ",
-		romaji: ["GU"],
-		katakana: "グ",
-	},
-	{
-		hiragana: "す",
-		romaji: ["SU"],
-		katakana: "ス",
-	},
-	{
-		hiragana: "ず",
-		romaji: ["ZU"],
-		katakana: "ズ",
-	},
-	{
-		hiragana: "つ",
-		romaji: ["TSU"],
-		katakana: "ツ",
-	},
-	{
-		hiragana: "づ",
-		romaji: ["DU"],
-	},
-	{
-		romaji: ["ZU", "DU"],
-		katakana: "ヅ",
-	},
-	{
-		hiragana: "ぬ",
-		romaji: ["NU"],
-		katakana: "ヌ",
-	},
-	{
-		hiragana: "ふ",
-		romaji: ["HU", "FU"],
-		katakana: "フ",
-	},
-	{
-		hiragana: "ぶ",
-		romaji: ["BU"],
-		katakana: "ブ",
-	},
-	{
-		hiragana: "ぷ",
-		romaji: ["PU"],
-		katakana: "プ",
-	},
-	{
-		hiragana: "む",
-		romaji: ["MU"],
-		katakana: "ム",
-	},
-	{
-		hiragana: "る",
-		romaji: ["RU"],
-		katakana: "ル",
-	},
-	{
-		hiragana: "ゆ",
-		romaji: ["YU"],
-		katakana: "ユ",
+		minusculasHiragana: "ぅ",
+		minusculasKatakana: "ゥ"
 	},
 	{
 		hiragana: "え",
-		romaji: ["E"],
+		romaji: "E",
 		katakana: "エ",
-	},
-	{
-		hiragana: "け",
-		romaji: ["KE"],
-		katakana: "ケ",
-	},
-	{
-		hiragana: "げ",
-		romaji: ["GE"],
-		katakana: "ゲ",
-	},
-	{
-		hiragana: "せ",
-		romaji: ["SE"],
-		katakana: "セ",
-	},
-	{
-		hiragana: "ぜ",
-		romaji: ["ZE"],
-		katakana: "ゼ",
-	},
-	{
-		hiragana: "て",
-		romaji: ["TE"],
-		katakana: "テ",
-	},
-	{
-		hiragana: "ね",
-		romaji: ["NE"],
-		katakana: "ネ",
-	},
-	{
-		hiragana: "へ",
-		romaji: ["HE"],
-		katakana: "ヘ",
-	},
-	{
-		hiragana: "べ",
-		romaji: ["BE"],
-		katakana: "ベ",
-	},
-	{
-		hiragana: "ぺ",
-		romaji: ["PE"],
-		katakana: "ペ",
-	},
-	{
-		hiragana: "め",
-		romaji: ["ME"],
-		katakana: "メ",
-	},
-	{
-		hiragana: "れ",
-		romaji: ["RE"],
-		katakana: "レ",
+		minusculasHiragana: "ぇ",
+		minusculasKatakana: "ェ"
 	},
 	{
 		hiragana: "お",
-		romaji: ["O"],
+		romaji: "O",
 		katakana: "オ",
+		minusculasHiragana: "ぉ",
+		minusculasKatakana: "ォ"
+	},
+	{
+		hiragana: "か",
+		romaji: "KA",
+		katakana: "カ",
+		minusculasHiragana: "ゕ",
+		minusculasKatakana: "ヵ"
+	},
+	{
+		hiragana: "き",
+		romaji: "KI",
+		katakana: "キ",
+	},
+	{
+		hiragana: "く",
+		romaji: "KU",
+		katakana: "ク",
+	},
+	{
+		hiragana: "け",
+		romaji: "KE",
+		katakana: "ケ",
+		minusculasHiragana: "ゖ",
+		minusculasKatakana: "ヶ"
 	},
 	{
 		hiragana: "こ",
-		romaji: ["KO"],
+		romaji: "KO",
 		katakana: "コ",
 	},
 	{
+		hiragana: "が",
+		romaji: "GA",
+		katakana: "ガ",
+	},
+
+	{
+		hiragana: "げ",
+		romaji: "GE",
+		katakana: "ゲ",
+	},
+	{
+		hiragana: "ぎ",
+		romaji: "GI",
+		katakana: "ギ",
+	},
+	{
 		hiragana: "ご",
-		romaji: ["GO"],
+		romaji: "GO",
 		katakana: "ゴ",
 	},
 	{
+		hiragana: "ぐ",
+		romaji: "GU",
+		katakana: "グ",
+	},
+	{
+		hiragana: "さ",
+		romaji: "SA",
+		katakana: "サ",
+	},
+	{
+		hiragana: "し",
+		romaji: "SHI",
+		katakana: "シ",
+	},
+	{
+		hiragana: "す",
+		romaji: "SU",
+		katakana: "ス",
+	},
+	{
+		hiragana: "せ",
+		romaji: "SE",
+		katakana: "セ",
+	},
+	{
 		hiragana: "そ",
-		romaji: ["SO"],
+		romaji: "SO",
 		katakana: "ソ",
 	},
 	{
+		hiragana: "ざ",
+		romaji: "ZA",
+		katakana: "ザ",
+	},
+	{
+		hiragana: "じ",
+		romaji: "JI",
+		katakana: "ジ",
+	},
+	{
+		hiragana: "ず",
+		romaji: "ZU",
+		katakana: "ズ",
+	},
+	{
+		hiragana: "ぜ",
+		romaji: "ZE",
+		katakana: "ゼ",
+	},
+	{
 		hiragana: "ぞ",
-		romaji: ["SO"],
+		romaji: "ZO",
 		katakana: "ゾ",
 	},
 	{
+		hiragana: "た",
+		romaji: "TA",
+		katakana: "タ",
+	},
+	{
+		hiragana: "ち",
+		romaji: "CHI",
+		katakana: "チ",
+	},
+	{
+		hiragana: "つ",
+		romaji: "TSU",
+		katakana: "ツ",
+		minusculasHiragana: "っ",
+		minusculasKatakana: "ッ"
+	},
+	{
+		hiragana: "て",
+		romaji: "TE",
+		katakana: "テ",
+	},
+	{
 		hiragana: "と",
-		romaji: ["TO"],
+		romaji: "TO",
 		katakana: "ト",
 	},
 	{
+		hiragana: "だ",
+		romaji: "DA",
+		katakana: "ダ",
+	},
+	{
+		hiragana: "ぢ",
+		romaji: "DI",
+		katakana: "ヂ",
+		pronunciacion: "JI",
+	},
+	{
+		hiragana: "づ",
+		romaji: "DU",
+		katakana: "ヅ",
+		pronunciacion: "ZU",
+	},
+	{
+		hiragana: "で",
+		romaji: "DE",
+		katakana: "デ",
+	},
+	{
 		hiragana: "ど",
-		romaji: ["DO"],
+		romaji: "DO",
 		katakana: "ド",
 	},
 	{
+		hiragana: "な",
+		romaji: "NA",
+		katakana: "ナ",
+	},
+	{
+		hiragana: "に",
+		romaji: "NI",
+		katakana: "ニ",
+	},
+	{
+		hiragana: "ぬ",
+		romaji: "NU",
+		katakana: "ヌ",
+	},
+	{
+		hiragana: "ね",
+		romaji: "NE",
+		katakana: "ネ",
+	},
+	{
 		hiragana: "の",
-		romaji: ["NO"],
+		romaji: "NO",
 		katakana: "ノ",
 	},
 	{
+		hiragana: "は",
+		romaji: "HA",
+		katakana: "ハ",
+	},
+	{
+		hiragana: "ひ",
+		romaji: "HI",
+		katakana: "ヒ",
+	},
+	{
+		hiragana: "ふ",
+		romaji: "HU-FU",
+		katakana: "フ",
+	},
+	{
+		hiragana: "へ",
+		romaji: "HE",
+		katakana: "ヘ",
+	},
+	{
 		hiragana: "ほ",
-		romaji: ["HO"],
+		romaji: "HO",
 		katakana: "ホ",
 	},
 	{
+		hiragana: "ば",
+		romaji: "BA",
+		katakana: "バ",
+	},
+	{
+		hiragana: "び",
+		romaji: "BI",
+		katakana: "ビ",
+	},
+	{
+		hiragana: "ぶ",
+		romaji: "BU",
+		katakana: "ブ",
+	},
+	{
+		hiragana: "べ",
+		romaji: "BE",
+		katakana: "ベ",
+	},
+	{
 		hiragana: "ぼ",
-		romaji: ["BO"],
+		romaji: "BO",
 		katakana: "ボ",
 	},
 	{
+		hiragana: "ぱ",
+		romaji: "PA",
+		katakana: "パ",
+	},
+	{
+		hiragana: "ぴ",
+		romaji: "PI",
+		katakana: "ピ",
+	},
+	{
+		hiragana: "ぷ",
+		romaji: "PU",
+		katakana: "プ",
+	},
+	{
+		hiragana: "ぺ",
+		romaji: "PE",
+		katakana: "ペ",
+	},
+	{
 		hiragana: "ぽ",
-		romaji: ["PO"],
+		romaji: "PO",
 		katakana: "ポ",
 	},
 	{
+		hiragana: "ま",
+		romaji: "MA",
+		katakana: "マ",
+	},
+	{
+		hiragana: "み",
+		romaji: "MI",
+		katakana: "ミ",
+	},
+	{
+		hiragana: "む",
+		romaji: "MU",
+		katakana: "ム",
+	},
+	{
+		hiragana: "め",
+		romaji: "ME",
+		katakana: "メ",
+	},
+	{
 		hiragana: "も",
-		romaji: ["MO"],
+		romaji: "MO",
 		katakana: "モ",
 	},
 	{
-		hiragana: "ろ",
-		romaji: ["RO"],
-		katakana: "ロ",
+		hiragana: "や",
+		romaji: "YA",
+		katakana: "ヤ",
+		minusculasHiragana: "ゃ",
+		minusculasKatakana: "ャ"
+	},
+	{
+		hiragana: "ゆ",
+		romaji: "YU",
+		katakana: "ユ",
+		minusculasHiragana: "ゅ",
+		minusculasKatakana: "ュ"
 	},
 	{
 		hiragana: "よ",
-		romaji: ["YO"],
+		romaji: "YO",
 		katakana: "ヨ",
+		minusculasHiragana: "ょ",
+		minusculasKatakana: "ョ"
+	},
+	{
+		hiragana: "ら",
+		romaji: "RA",
+		katakana: "ラ",
+	},
+	{
+		hiragana: "り",
+		romaji: "RI",
+		katakana: "リ",
+	},
+	{
+		hiragana: "る",
+		romaji: "RU",
+		katakana: "ル",
+	},
+	{
+		hiragana: "れ",
+		romaji: "RE",
+		katakana: "レ",
+	},
+	{
+		hiragana: "ろ",
+		romaji: "RO",
+		katakana: "ロ",
 	},
 	{
 		hiragana: "わ",
-		romaji: ["WA"],
+		romaji: "WA",
 		katakana: "ワ",
-	},
-	{
-		hiragana: "を",
-		romaji: ["WO"],
-		katakana: "ヲ",
-	},
-	{
-		romaji: ["O", "WO"],
-		katakana: "ヲ",
-	},
-	{
-		hiragana: "ん",
-		romaji: ["N"],
-		katakana: "ン",
+		minusculasHiragana: "ゎ",
+		minusculasKatakana: "ヮ"
 	},
 	{
 		hiragana: "ゐ",
-		romaji: ["WI"],
+		romaji: "WI",
 		katakana: "ヰ",
 	},
 	{
 		hiragana: "ゑ",
-		romaji: ["WE"],
+		romaji: "WE",
 		katakana: "ヱ",
 	},
 	{
-		romaji: ["VA"],
-		katakana: "ヷ",
+		hiragana: "を",
+		romaji: "WO",
+		katakana: "ヲ",
+		pronunciacion: "O",
 	},
 	{
-		romaji: ["VI"],
+		romaji: "VA",
+		katakana: "ヷ",
+		pronunciacion: "BWA",
+	},
+	{
+		romaji: "VI",
 		katakana: "ヸ",
+		pronunciacion: "BWI",
 	},
 	{
 		hiragana: "ゔ",
-		romaji: ["VU"],
+		romaji: "VU",
 		katakana: "ヴ",
+		pronunciacion: "BU",
 	},
 	{
-		romaji: ["VE"],
+		romaji: "VE",
 		katakana: "ヹ",
+		pronunciacion: "BWE",
 	},
 	{
-		romaji: ["VO"],
+		romaji: "VO",
 		katakana: "ヺ",
+		pronunciacion: "BWO",
 	},
 ];
+
+export const KATAKANA_PROLONGED_SOUND_MARK = "ー";
+export const TSU_FOR_DUPLICATE_VOWEL: { hiragana: string; katakana: string } = {
+	hiragana: "っ",
+	katakana: "ッ",
+};

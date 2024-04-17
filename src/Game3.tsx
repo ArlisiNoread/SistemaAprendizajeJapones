@@ -9,8 +9,8 @@ let Game2: React.FC = () => {
 	let [endScreen, setEndScreen] = useState<boolean>(false);
 	let startTime = useRef<number>(0.0);
 	let endTime = useRef<number>(0.0);
-	let juegos = useRef<Kana[][]>();
-	let [kanasTest, setKanasTest] = useState<Kana[] | undefined>();
+	let juegos = useRef<Kana[]>();
+	let [kanasTest, setKanasTest] = useState<Kana | undefined>();
 	let [resueltoActual, setResueltoActual] = useState<boolean>(false);
 
 	let iniciarJuego = () => {
@@ -38,23 +38,16 @@ let Game2: React.FC = () => {
 		});
 
 		//Array de juegos.
-		let arrayJuegos: Kana[][] = [];
+		let arrayJuegos: Kana[] = [];
 
 		//Genero juegos.
 		for (let x = 0; x < noJuegos; x++) {
 			if (copyKanas.length <= 0) break;
-			let arraySimilarKanas: Kana[] = [];
-			let idRandomKana = Math.floor(Math.random() * copyKanas.length);
+			let idRandomKana = Math.round(
+				Math.random() * (copyKanas.length - 1)
+			);
 			let randomKana = copyKanas.splice(idRandomKana, 1)[0];
-			arraySimilarKanas.push(randomKana);
-			for (let y = 0; y < copyKanas.length; y++) {
-				if (copyKanas[y].romaji === randomKana.romaji) {
-					let anotherRandomKana = copyKanas.splice(y, 1)[0];
-					arraySimilarKanas.push(anotherRandomKana);
-					y--;
-				}
-			}
-			arrayJuegos.push(arraySimilarKanas);
+			arrayJuegos.push(randomKana);
 		}
 		juegos.current = arrayJuegos;
 	};
@@ -69,8 +62,7 @@ let Game2: React.FC = () => {
 			}
 		}
 
-		let siguienteJuego: Kana[] | undefined = juegos.current?.pop();
-
+		let siguienteJuego: Kana | undefined = juegos.current?.pop();
 		setKanasTest(siguienteJuego);
 	};
 
@@ -88,18 +80,6 @@ let Game2: React.FC = () => {
 			" segundos."
 		);
 	};
-
-	let imprimeRomajis= (romajis: string[]): string => {
-		if(romajis.length === 0){
-			return "";
-		}else if(romajis.length === 1){
-			return romajis[0];
-		}else if (romajis.length === 2){
-			return "" + romajis[0] + " - " + romajis[1];
-		}
-
-		return "TO-DO configurar valores mayores a 2.";
-	}
 
 	const presionarEnter = (e: KeyboardEvent) => {
 		if (e.key !== "Enter") return;
@@ -195,7 +175,7 @@ let Game2: React.FC = () => {
 				>
 					<Grid item xs={12}>
 						<h1 style={{ transform: "scale(1.5)" }}>
-							{kanasTest ? imprimeRomajis(kanasTest[0].romaji) : ""}
+							{kanasTest ? (kanasTest.romaji + ((kanasTest?.pronunciacion)? " (" + kanasTest.pronunciacion + ")" : ""))  : ""}
 						</h1>
 					</Grid>
 					<Grid
@@ -218,14 +198,22 @@ let Game2: React.FC = () => {
 							}}
 						>
 							{kanasTest ? (
-								kanasTest.map((kana) => {
-									return (
-										<>
-											{(kana.hiragana)?<InlineGrafo>{kana.hiragana}</InlineGrafo>:""}
-											{(kana.katakana)?<InlineGrafo>{kana.katakana}</InlineGrafo>:""}
-										</>
-									);
-								})
+								<>
+									{kanasTest.hiragana ? (
+										<InlineGrafo>
+											{kanasTest.hiragana}
+										</InlineGrafo>
+									) : (
+										""
+									)}
+									{kanasTest.katakana ? (
+										<InlineGrafo>
+											{kanasTest.katakana}
+										</InlineGrafo>
+									) : (
+										""
+									)}
+								</>
 							) : (
 								<></>
 							)}
@@ -249,18 +237,17 @@ let Game2: React.FC = () => {
 };
 export default Game2;
 
-
-let InlineGrafo: React.FC<{children: React.ReactNode}> = ({ children })=>{
-	return(
+let InlineGrafo: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+	return (
 		<h1
-		style={{
-			display: "inline-block",
-			borderStyle: "solid",
-			marginLeft: "5px",
-			marginRight: "5px",
-		}}
-	>
-		{children}
-	</h1>
+			style={{
+				display: "inline-block",
+				borderStyle: "solid",
+				marginLeft: "5px",
+				marginRight: "5px",
+			}}
+		>
+			{children}
+		</h1>
 	);
-}
+};

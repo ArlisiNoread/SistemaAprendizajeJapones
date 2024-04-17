@@ -2,17 +2,24 @@ import {
 	Button,
 	Checkbox,
 	FormControlLabel,
-	FormGroup,
 	Grid,
 	TextField,
 } from "@mui/material";
 import { relative } from "path";
 import React, { useEffect, useRef, useState } from "react";
-import { Kanas, Kana } from "./Kanas";
+import {
+	Kanas,
+	Kana,
+	KATAKANA_PROLONGED_SOUND_MARK,
+	TSU_FOR_DUPLICATE_VOWEL,
+} from "./Kanas";
+
+const probabilidadExtensor = 0.1;
+const probabilidadDuplicarConsonante = 0.1;
 
 type FraseTest = {
 	caracteresJaponeses: string;
-	romajis: string[];
+	romaji: string;
 };
 
 let Game2: React.FC = () => {
@@ -28,6 +35,7 @@ let Game2: React.FC = () => {
 	let [solucion, setSolucion] = useState<string>("");
 	let [hiragana, setHiragana] = useState<boolean>(true);
 	let [katakana, setKatakana] = useState<boolean>(true);
+	let listaKanasElegidos = useRef<Kana[]>([]);
 
 	let iniciarJuego = () => {
 		if (!hiragana && !katakana) return;
@@ -35,6 +43,7 @@ let Game2: React.FC = () => {
 		cntJuegos.current = 0;
 		startTime.current = performance.now();
 		if (endScreen) setEndScreen(false);
+		cargarKanasElegidos();
 		siguienteFrase();
 		setStarted(true);
 	};
@@ -45,49 +54,136 @@ let Game2: React.FC = () => {
 		setEndScreen(true);
 	};
 
+	let cargarKanasElegidos = () => {
+		let tempListaKanasElegidos: Kana[] = [];
+		Kanas.forEach((kana) => {
+			if (hiragana && katakana) {
+				tempListaKanasElegidos.push(kana);
+			} else if (hiragana && kana.hiragana) {
+				tempListaKanasElegidos.push(kana);
+			} else if (katakana && kana.katakana) {
+				tempListaKanasElegidos.push(kana);
+			}
+		});
+		listaKanasElegidos.current = tempListaKanasElegidos;
+	};
+
 	let siguienteFrase = () => {
 		setSolucion("");
 		setResueltoActual(false);
-
 		if (cntJuegos.current >= noJuegos) {
 			finalizarJuego();
 			return;
 		}
+
 		cntJuegos.current += 1;
-		let sizeKanaList = Kanas.length;
+
 		let caracteresJaponeses = "";
-		let romajis: string[] = [];
-		let randomWordSize = 1 + Math.floor(Math.random() * (maxTamanio - 1));
+		let romaji: string = "";
+
+		let randomWordSize = 1 + Math.round(Math.random() * maxTamanio);
 		for (let x = 0; x < randomWordSize; x++) {
-			let randomKana = Math.floor(Math.random() * sizeKanaList);
-			let kana = Kanas[randomKana];
-			if (kana.hiragana && kana.katakana && hiragana && katakana) {
-				caracteresJaponeses +=
-					Math.round(Math.random()) === 0
-						? kana.hiragana
-						: kana.katakana;
-			} else if (kana.hiragana && hiragana) {
-				caracteresJaponeses += kana.hiragana;
-			} else if (kana.katakana && katakana) {
-				caracteresJaponeses += kana.katakana;
-			} else {
-				x--;
-				continue;
-			}
-			if(romajis.length === 0){
-				kana.romaji.forEach((x)=>{romajis.push(x)});
-			}else{
-				let newRomajis: string[] = [];
-				for(let romaji of kana.romaji){
-					romajis.forEach((x)=>{newRomajis.push(x + romaji)});
+			let randomIdKana = Math.floor(
+				Math.random() * (listaKanasElegidos.current.length - 1)
+			);
+			let kana = listaKanasElegidos.current[randomIdKana];
+
+			//Preparo los elementos para ingresar para poder adaptar el extensor o las contracciones en futuro.
+			let kanaPorIngresar = "";
+			let romajiPorIngresar = "";
+			//**************/
+			let esHiragana: boolean = true;
+
+			//¿Se prolonga la vocal?
+			let prolongedSoundMark: boolean = false;
+			let monedaAlAire = Math.random();
+			if (monedaAlAire <= probabilidadExtensor) prolongedSoundMark = true;
+
+			//¿Se prolonga la consonante?
+			let prolongedConsonant: boolean = false;
+			monedaAlAire = Math.random();
+			if (monedaAlAire <= probabilidadDuplicarConsonante)
+				prolongedConsonant = true;
+
+			if (kana.hiragana && kana.katakana) {
+				monedaAlAire = Math.round(Math.random());
+				if (monedaAlAire === 0) {
+					kanaPorIngresar = kana.hiragana;
+				} else {
+					kanaPorIngresar = kana.katakana;
+					esHiragana = false;
 				}
-				romajis = newRomajis;
+			} else if (kana.hiragana) {
+				kanaPorIngresar += kana.hiragana;
+			} else if (kana.katakana) {
+				esHiragana = false;
+				kanaPorIngresar += kana.katakana;
 			}
+
+			//Excepción HU-FU
+			if (kana.romaji === "HU-FU") {
+				let monedaAlAire = Math.round(Math.random());
+				romajiPorIngresar = monedaAlAire === 0 ? "HU" : "FU";
+			} else {
+				romajiPorIngresar += kana.romaji;
+			}
+
+			//Posibilidad de que se duplique la consonante hacia atrás.
+			const reVocals = /^[A-U]$/;
+			if (
+				!reVocals.test(romajiPorIngresar[0]) &&
+				romajiPorIngresar !== "ン" &&
+				romajiPorIngresar !== "ん" &&
+				probabilidadDuplicarConsonante
+			) {
+				if (esHiragana) {
+					kanaPorIngresar =
+						TSU_FOR_DUPLICATE_VOWEL.hiragana + kanaPorIngresar;
+				} else {
+					kanaPorIngresar =
+						TSU_FOR_DUPLICATE_VOWEL.katakana + kanaPorIngresar;
+				}
+				romajiPorIngresar = romajiPorIngresar[0] + romajiPorIngresar;
+			}
+
+			//Posibilidad de que se duplique la vocal hacia delante o extensor.
+			if (
+				prolongedSoundMark &&
+				romajiPorIngresar !== "ン" &&
+				romajiPorIngresar !== "ん"
+			) {
+				if (esHiragana) {
+					let buscaMinuscula = (
+						romajiABuscarMinuscula: string
+					): string => {
+						for (let k of listaKanasElegidos.current) {
+							if (romajiABuscarMinuscula === k.romaji) {
+								return k.minusculasHiragana ? k.minusculasHiragana : "";
+							}
+						}
+						return (
+							"NoEncontréMinúsculaDe:" + romajiABuscarMinuscula
+						);
+					};
+					kanaPorIngresar += buscaMinuscula(
+						romajiPorIngresar[kanaPorIngresar.length - 1]
+					);
+				} else {
+					kanaPorIngresar += KATAKANA_PROLONGED_SOUND_MARK;
+				}
+				//Inserto Extensor de Katakanas.
+				romajiPorIngresar +=
+					romajiPorIngresar[romajiPorIngresar.length - 1];
+			}
+
+			//Concateno, toda adaptación de extensores o contracciones debe hacerse atrás.
+			caracteresJaponeses += kanaPorIngresar;
+			romaji += romajiPorIngresar;
 		}
-		romajis.forEach((x)=>{console.log(x)});
+
 		let newFrase: FraseTest = {
 			caracteresJaponeses: caracteresJaponeses,
-			romajis: romajis,
+			romaji: romaji,
 		};
 		setFraseTest(newFrase);
 	};
@@ -303,10 +399,26 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 			disabled={disabled}
 			onChange={(e) => {
 				let txt = e.target.value.trim().toUpperCase();
-				if(fraseTest){
-					fraseTest.romajis.forEach((romaji)=>{
-						if(txt === romaji) setResueltoActual(true);
-					});
+				if (fraseTest) {
+					//Excepción FFU-HHU y FU-HU
+					if (
+						fraseTest.romaji.includes("FU") ||
+						fraseTest.romaji.includes("HU")
+					) {
+						//EL ORDEN IMPORTA
+						let tempTesteo = fraseTest.romaji.replaceAll(
+							"FFU",
+							"HHU"
+						);
+						tempTesteo = tempTesteo.replaceAll("FU", "HU");
+						let tempTxt = txt.replaceAll("FFU", "HHU");
+						tempTxt = tempTxt.replaceAll("FU", "HU");
+						console.log(tempTesteo);
+						if (tempTesteo === tempTxt) setResueltoActual(true);
+					} else {
+						console.log(fraseTest.romaji);
+						if (txt === fraseTest.romaji) setResueltoActual(true);
+					}
 				}
 
 				setSolucion(e.target.value);
