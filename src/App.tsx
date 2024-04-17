@@ -6,6 +6,7 @@ import closeIcon from "./img/closeIcon.png";
 import "./App.css";
 import Game2 from "./Game2";
 import Game3 from "./Game3";
+import Game4 from "./Game4";
 
 let appStyles: React.CSSProperties = {
 	height: "100vh",
@@ -25,6 +26,8 @@ function App() {
 				return <Game2 />;
 			case 3:
 				return <Game3 />;
+			case 4:
+				return <Game4 />;
 			default:
 				return <p>Error.</p>;
 		}
@@ -90,9 +93,9 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 				alignContent={"center"}
 				style={{ height: "100%" }}
 				spacing={0}
-				columnGap={10}
+				columnGap={5}
 			>
-				<Grid item xs={2}>
+				<Grid item>
 					<Button
 						variant="outlined"
 						size="large"
@@ -103,7 +106,7 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 						Nemotecnias
 					</Button>
 				</Grid>
-				<Grid item xs={2}>
+				<Grid item>
 					<Button
 						variant="outlined"
 						size="large"
@@ -114,7 +117,7 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 						Traducir
 					</Button>
 				</Grid>
-				<Grid item xs={2}>
+				<Grid item>
 					<Button
 						variant="outlined"
 						size="large"
@@ -123,6 +126,17 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 						}}
 					>
 						Sonido a Kana
+					</Button>
+				</Grid>
+				<Grid item>
+					<Button
+						variant="outlined"
+						size="large"
+						onClick={() => {
+							setJuego(4);
+						}}
+					>
+						Combinaciones
 					</Button>
 				</Grid>
 			</Grid>

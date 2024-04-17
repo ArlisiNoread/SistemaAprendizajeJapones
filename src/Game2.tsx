@@ -12,8 +12,10 @@ import {
 	Kana,
 	KATAKANA_PROLONGED_SOUND_MARK,
 	TSU_FOR_DUPLICATE_VOWEL,
+	Combinaciones,
 } from "./Kanas";
 
+const probabilidadCombinado = 0.15;
 const probabilidadExtensor = 0.1;
 const probabilidadDuplicarConsonante = 0.1;
 
@@ -36,6 +38,7 @@ let Game2: React.FC = () => {
 	let [hiragana, setHiragana] = useState<boolean>(true);
 	let [katakana, setKatakana] = useState<boolean>(true);
 	let listaKanasElegidos = useRef<Kana[]>([]);
+	let listaKanasCombinadosElegidos = useRef<Kana[]>([]);
 
 	let iniciarJuego = () => {
 		if (!hiragana && !katakana) return;
@@ -66,6 +69,18 @@ let Game2: React.FC = () => {
 			}
 		});
 		listaKanasElegidos.current = tempListaKanasElegidos;
+
+		let tempListaKanasCombinadosElegidos: Kana[] = [];
+		Combinaciones.forEach((kanaCombinado) => {
+			if (hiragana && katakana) {
+				tempListaKanasCombinadosElegidos.push(kanaCombinado);
+			} else if (hiragana && kanaCombinado.hiragana) {
+				tempListaKanasCombinadosElegidos.push(kanaCombinado);
+			} else if (katakana && kanaCombinado.katakana) {
+				tempListaKanasCombinadosElegidos.push(kanaCombinado);
+			}
+		});
+		listaKanasCombinadosElegidos.current = tempListaKanasCombinadosElegidos;
 	};
 
 	let siguienteFrase = () => {
@@ -83,102 +98,136 @@ let Game2: React.FC = () => {
 
 		let randomWordSize = 1 + Math.round(Math.random() * maxTamanio);
 		for (let x = 0; x < randomWordSize; x++) {
-			let randomIdKana = Math.floor(
-				Math.random() * (listaKanasElegidos.current.length - 1)
-			);
-			let kana = listaKanasElegidos.current[randomIdKana];
-
 			//Preparo los elementos para ingresar para poder adaptar el extensor o las contracciones en futuro.
 			let kanaPorIngresar = "";
 			let romajiPorIngresar = "";
 			//**************/
-			let esHiragana: boolean = true;
 
-			//¿Se prolonga la vocal?
-			let prolongedSoundMark: boolean = false;
+			//Variable chistosa que meramente uso para sacar probabilidades.
 			let monedaAlAire = Math.random();
-			if (monedaAlAire <= probabilidadExtensor) prolongedSoundMark = true;
 
-			//¿Se prolonga la consonante?
-			let prolongedConsonant: boolean = false;
-			monedaAlAire = Math.random();
-			if (monedaAlAire <= probabilidadDuplicarConsonante)
-				prolongedConsonant = true;
+			if (monedaAlAire <= probabilidadCombinado) {
+				//Agregaré combinado esta vez.
 
-			if (kana.hiragana && kana.katakana) {
-				monedaAlAire = Math.round(Math.random());
-				if (monedaAlAire === 0) {
-					kanaPorIngresar = kana.hiragana;
-				} else {
-					kanaPorIngresar = kana.katakana;
-					esHiragana = false;
+				let listaCombinados = listaKanasCombinadosElegidos.current;
+
+				let idRandomCombinado = Math.round(
+					Math.random() * (listaCombinados.length - 1)
+				);
+
+				let kanaCombinadoElegido = listaCombinados[idRandomCombinado];
+				if (
+					hiragana &&
+					katakana &&
+					kanaCombinadoElegido.hiragana &&
+					kanaCombinadoElegido.katakana
+				) {
+					monedaAlAire = Math.random();
+					if (monedaAlAire <= 0.5) {
+						kanaPorIngresar = kanaCombinadoElegido.hiragana;
+					} else {
+						kanaPorIngresar = kanaCombinadoElegido.katakana;
+					}
+				} else if (hiragana && kanaCombinadoElegido.hiragana) {
+					kanaPorIngresar = kanaCombinadoElegido.hiragana;
+				} else if (katakana && kanaCombinadoElegido.katakana) {
+					kanaPorIngresar = kanaCombinadoElegido.katakana;
 				}
-			} else if (kana.hiragana) {
-				kanaPorIngresar += kana.hiragana;
-			} else if (kana.katakana) {
-				esHiragana = false;
-				kanaPorIngresar += kana.katakana;
-			}
-
-			//Excepción HU-FU
-			if (kana.romaji === "HU-FU") {
-				let monedaAlAire = Math.round(Math.random());
-				romajiPorIngresar = monedaAlAire === 0 ? "HU" : "FU";
+				romajiPorIngresar = kanaCombinadoElegido.romaji;
 			} else {
-				romajiPorIngresar += kana.romaji;
-			}
+				let randomIdKana = Math.floor(
+					Math.random() * (listaKanasElegidos.current.length - 1)
+				);
+				let kana = listaKanasElegidos.current[randomIdKana];
+				let esHiragana: boolean = true;
+				//¿Se prolonga la vocal?
+				let prolongedSoundMark: boolean = false;
+				monedaAlAire = Math.random();
+				if (monedaAlAire <= probabilidadExtensor)
+					prolongedSoundMark = true;
 
-			//Posibilidad de que se duplique la consonante hacia atrás.
-			const reVocals = /^[A-U]$/;
-			if (
-				!reVocals.test(romajiPorIngresar[0]) &&
-				romajiPorIngresar !== "ン" &&
-				romajiPorIngresar !== "ん" &&
-				probabilidadDuplicarConsonante
-			) {
-				if (esHiragana) {
-					kanaPorIngresar =
-						TSU_FOR_DUPLICATE_VOWEL.hiragana + kanaPorIngresar;
-				} else {
-					kanaPorIngresar =
-						TSU_FOR_DUPLICATE_VOWEL.katakana + kanaPorIngresar;
+				//¿Se prolonga la consonante?
+				let prolongedConsonant: boolean = false;
+				monedaAlAire = Math.random();
+				if (monedaAlAire <= probabilidadDuplicarConsonante)
+					prolongedConsonant = true;
+
+				if (kana.hiragana && kana.katakana) {
+					monedaAlAire = Math.round(Math.random());
+					if (monedaAlAire === 0) {
+						kanaPorIngresar = kana.hiragana;
+					} else {
+						kanaPorIngresar = kana.katakana;
+						esHiragana = false;
+					}
+				} else if (kana.hiragana) {
+					kanaPorIngresar += kana.hiragana;
+				} else if (kana.katakana) {
+					esHiragana = false;
+					kanaPorIngresar += kana.katakana;
 				}
-				romajiPorIngresar = romajiPorIngresar[0] + romajiPorIngresar;
-			}
 
-			//Posibilidad de que se duplique la vocal hacia delante o extensor.
-			if (
-				prolongedSoundMark &&
-				romajiPorIngresar !== "ン" &&
-				romajiPorIngresar !== "ん"
-			) {
-				if (esHiragana) {
-					let buscaMinuscula = (
-						romajiABuscarMinuscula: string
-					): string => {
-						for (let k of listaKanasElegidos.current) {
-							if (romajiABuscarMinuscula === k.romaji) {
-								return k.minusculasHiragana
-									? k.minusculasHiragana
-									: "";
+				//Excepción HU-FU
+				if (kana.romaji === "HU-FU") {
+					let monedaAlAire = Math.round(Math.random());
+					romajiPorIngresar = monedaAlAire === 0 ? "HU" : "FU";
+				} else {
+					romajiPorIngresar += kana.romaji;
+				}
+
+				//Posibilidad de que se duplique la consonante hacia atrás.
+				const reVocals = /^[A-U]$/;
+				if (
+					!reVocals.test(romajiPorIngresar[0]) &&
+					romajiPorIngresar !== "ン" &&
+					romajiPorIngresar !== "ん" &&
+					probabilidadDuplicarConsonante
+				) {
+					if (esHiragana) {
+						kanaPorIngresar =
+							TSU_FOR_DUPLICATE_VOWEL.hiragana + kanaPorIngresar;
+					} else {
+						kanaPorIngresar =
+							TSU_FOR_DUPLICATE_VOWEL.katakana + kanaPorIngresar;
+					}
+					romajiPorIngresar =
+						romajiPorIngresar[0] + romajiPorIngresar;
+				}
+
+				//Posibilidad de que se duplique la vocal hacia delante o extensor.
+				if (
+					prolongedSoundMark &&
+					romajiPorIngresar !== "ン" &&
+					romajiPorIngresar !== "ん"
+				) {
+					if (esHiragana) {
+						let buscaMinuscula = (
+							romajiABuscarMinuscula: string
+						): string => {
+							for (let k of listaKanasElegidos.current) {
+								if (romajiABuscarMinuscula === k.romaji) {
+									return k.minusculasHiragana
+										? k.minusculasHiragana
+										: "";
+								}
 							}
-						}
-						return (
-							"NoEncontréMinúsculaDe:" + romajiABuscarMinuscula
+							return (
+								"NoEncontréMinúsculaDe:" +
+								romajiABuscarMinuscula
+							);
+						};
+						kanaPorIngresar += buscaMinuscula(
+							romajiPorIngresar[romajiPorIngresar.length - 1]
 						);
-					};
-					kanaPorIngresar += buscaMinuscula(
-						romajiPorIngresar[romajiPorIngresar.length - 1]
-					);
-				} else {
-					kanaPorIngresar += KATAKANA_PROLONGED_SOUND_MARK;
+					} else {
+						kanaPorIngresar += KATAKANA_PROLONGED_SOUND_MARK;
+					}
+					//Inserto Extensor de Katakanas.
+					romajiPorIngresar +=
+						romajiPorIngresar[romajiPorIngresar.length - 1];
 				}
-				//Inserto Extensor de Katakanas.
-				romajiPorIngresar +=
-					romajiPorIngresar[romajiPorIngresar.length - 1];
 			}
-
-			//Concateno, toda adaptación de extensores o contracciones debe hacerse atrás.
+			//Concateno posibles extensores, modificadores o combinaciones.
 			caracteresJaponeses += kanaPorIngresar;
 			romaji += romajiPorIngresar;
 		}

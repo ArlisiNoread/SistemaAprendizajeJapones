@@ -7,6 +7,13 @@ export type Kana = {
 	minusculasKatakana?: string;
 };
 
+export const KATAKANA_PROLONGED_SOUND_MARK = "ー";
+
+export const TSU_FOR_DUPLICATE_VOWEL: { hiragana: string; katakana: string } = {
+	hiragana: "っ",
+	katakana: "ッ",
+};
+
 export const Kanas: Kana[] = [
 	{
 		hiragana: "あ",
@@ -20,35 +27,35 @@ export const Kanas: Kana[] = [
 		romaji: "I",
 		katakana: "イ",
 		minusculasHiragana: "ぃ",
-		minusculasKatakana: "ィ"
+		minusculasKatakana: "ィ",
 	},
 	{
 		hiragana: "う",
 		romaji: "U",
 		katakana: "ウ",
 		minusculasHiragana: "ぅ",
-		minusculasKatakana: "ゥ"
+		minusculasKatakana: "ゥ",
 	},
 	{
 		hiragana: "え",
 		romaji: "E",
 		katakana: "エ",
 		minusculasHiragana: "ぇ",
-		minusculasKatakana: "ェ"
+		minusculasKatakana: "ェ",
 	},
 	{
 		hiragana: "お",
 		romaji: "O",
 		katakana: "オ",
 		minusculasHiragana: "ぉ",
-		minusculasKatakana: "ォ"
+		minusculasKatakana: "ォ",
 	},
 	{
 		hiragana: "か",
 		romaji: "KA",
 		katakana: "カ",
 		minusculasHiragana: "ゕ",
-		minusculasKatakana: "ヵ"
+		minusculasKatakana: "ヵ",
 	},
 	{
 		hiragana: "き",
@@ -65,7 +72,7 @@ export const Kanas: Kana[] = [
 		romaji: "KE",
 		katakana: "ケ",
 		minusculasHiragana: "ゖ",
-		minusculasKatakana: "ヶ"
+		minusculasKatakana: "ヶ",
 	},
 	{
 		hiragana: "こ",
@@ -163,7 +170,7 @@ export const Kanas: Kana[] = [
 		romaji: "TSU",
 		katakana: "ツ",
 		minusculasHiragana: "っ",
-		minusculasKatakana: "ッ"
+		minusculasKatakana: "ッ",
 	},
 	{
 		hiragana: "て",
@@ -332,21 +339,21 @@ export const Kanas: Kana[] = [
 		romaji: "YA",
 		katakana: "ヤ",
 		minusculasHiragana: "ゃ",
-		minusculasKatakana: "ャ"
+		minusculasKatakana: "ャ",
 	},
 	{
 		hiragana: "ゆ",
 		romaji: "YU",
 		katakana: "ユ",
 		minusculasHiragana: "ゅ",
-		minusculasKatakana: "ュ"
+		minusculasKatakana: "ュ",
 	},
 	{
 		hiragana: "よ",
 		romaji: "YO",
 		katakana: "ヨ",
 		minusculasHiragana: "ょ",
-		minusculasKatakana: "ョ"
+		minusculasKatakana: "ョ",
 	},
 	{
 		hiragana: "ら",
@@ -378,7 +385,7 @@ export const Kanas: Kana[] = [
 		romaji: "WA",
 		katakana: "ワ",
 		minusculasHiragana: "ゎ",
-		minusculasKatakana: "ヮ"
+		minusculasKatakana: "ヮ",
 	},
 	{
 		hiragana: "ゐ",
@@ -424,8 +431,287 @@ export const Kanas: Kana[] = [
 	},
 ];
 
-export const KATAKANA_PROLONGED_SOUND_MARK = "ー";
-export const TSU_FOR_DUPLICATE_VOWEL: { hiragana: string; katakana: string } = {
-	hiragana: "っ",
-	katakana: "ッ",
-};
+export const Combinaciones: Kana[] = [
+	{
+		romaji: "VA",
+		katakana: "ヴァ",
+		pronunciacion: "BWA"
+	},
+	{
+		romaji: "VI",
+		katakana: "ヴィ",
+		pronunciacion: "BWI"
+	},
+	{
+		romaji: "VE",
+		katakana: "ヴェ",
+		pronunciacion: "BWE"
+	},
+	{
+		romaji: "VO",
+		katakana: "ヴォ",
+		pronunciacion: "BWO"
+	},
+	{
+		romaji: "FA",
+		katakana: "ファ",
+	},
+	{
+		romaji: "FI",
+		katakana: "フィ",
+	},
+	{
+		romaji: "FE",
+		katakana: "フェ",
+	},
+	{
+		romaji: "FO",
+		katakana: "フォ",
+	},
+	{
+		romaji: "KYA",
+		hiragana: "きゃ",
+		katakana: "キャ",
+	},
+	{
+		romaji: "KYU",
+		hiragana: "きゅ",
+		katakana: "キュ",
+	},
+	{
+		romaji: "KYO",
+		hiragana: "きょ",
+		katakana: "キョ",
+	},
+	{
+		romaji: "SHA",
+		hiragana: "しゃ",
+		katakana: "シャ",
+	},
+	{
+		romaji: "SHU",
+		hiragana: "しゅ",
+		katakana: "シュ",
+	},
+	{
+		romaji: "SHO",
+		hiragana: "しょ",
+		katakana: "ショ",
+	},
+	{
+		romaji: "CHA",
+		hiragana: "さゃ",
+		katakana: "シャ",
+	},
+	{
+		romaji: "CHU",
+		hiragana: "さゅ",
+		katakana: "シュ",
+	},
+	{
+		romaji: "CHO",
+		hiragana: "さょ",
+		katakana: "ショ",
+	},
+	{
+		romaji: "NYA",
+		hiragana: "にゃ",
+		katakana: "ニャ",
+	},
+	{
+		romaji: "NYU",
+		hiragana: "にゅ",
+		katakana: "ニュ",
+	},
+	{
+		romaji: "NYO",
+		hiragana: "にょ",
+		katakana: "ニョ",
+	},
+	{
+		romaji: "HYA",
+		hiragana: "ひゃ",
+		katakana: "ヒャ",
+	},
+	{
+		romaji: "HYU",
+		hiragana: "ひゅ",
+		katakana: "ヒュ",
+	},
+	{
+		romaji: "HYO",
+		hiragana: "ひょ",
+		katakana: "ヒョ",
+	},
+	{
+		romaji: "MYA",
+		hiragana: "みゃ",
+		katakana: "ミャ",
+	},
+	{
+		romaji: "MYU",
+		hiragana: "みゅ",
+		katakana: "ミュ",
+	},
+	{
+		romaji: "MYO",
+		hiragana: "みょ",
+		katakana: "ミョ",
+	},
+	{
+		romaji: "RYA",
+		hiragana: "りゃ",
+		katakana: "リャ",
+	},
+	{
+		romaji: "RYU",
+		hiragana: "りゅ",
+		katakana: "リュ",
+	},
+	{
+		romaji: "RYO",
+		hiragana: "りょ",
+		katakana: "リョ",
+	},
+	{
+		romaji: "GYA",
+		hiragana: "ぎゃ",
+		katakana: "ギャ",
+	},
+	{
+		romaji: "GYU",
+		hiragana: "ぎゅ",
+		katakana: "ギュ",
+	},
+	{
+		romaji: "GYO",
+		hiragana: "ぎょ",
+		katakana: "ギョ",
+	},
+	{
+		romaji: "JYA",
+		hiragana: "じゃ",
+		katakana: "ジャ",
+	},
+	{
+		romaji: "JYU",
+		hiragana: "じゅ",
+		katakana: "ジュ",
+	},
+	{
+		romaji: "JYO",
+		hiragana: "じょ",
+		katakana: "ジョ",
+	},
+	{
+		romaji: "DYA",
+		hiragana: "ぢゃ",
+		katakana: "ヂャ",
+		pronunciacion: "JYA",
+	},
+	{
+		romaji: "DYU",
+		hiragana: "ぢゅ",
+		katakana: "ヂュ",
+		pronunciacion: "JYU",
+	},
+	{
+		romaji: "DYO",
+		hiragana: "ぢょ",
+		katakana: "ヂョ",
+		pronunciacion: "JYO",
+	},
+	{
+		romaji: "BYA",
+		hiragana: "びゃ",
+		katakana: "ビャ",
+	},
+	{
+		romaji: "BYU",
+		hiragana: "びゅ",
+		katakana: "ビュ",
+	},
+	{
+		romaji: "BYO",
+		hiragana: "びょ",
+		katakana: "ビョ",
+	},
+	{
+		romaji: "PYA",
+		hiragana: "ぴゃ",
+		katakana: "ピャ",
+	},
+	{
+		romaji: "PYU",
+		hiragana: "ぴゅ",
+		katakana: "ピュ",
+	},
+	{
+		romaji: "PYO",
+		hiragana: "ぴょ",
+		katakana: "ピョ",
+	},
+	{
+		romaji: "WI",
+		katakana: "ウィ",
+	},
+	{
+		romaji: "WE",
+		katakana: "ウェ",
+	},
+	{
+		romaji: "UXO",
+		katakana: "ウォ",
+		pronunciacion: "WO",
+	},
+	{
+		romaji: "TSA",
+		katakana: "ツァ",
+		pronunciacion: "TZA",
+	},
+	{
+		romaji: "TSI",
+		katakana: "ツィ",
+		pronunciacion: "TZI",
+	},
+	{
+		romaji: "TSE",
+		katakana: "ツェ",
+		pronunciacion: "TZE",
+	},
+	{
+		romaji: "TSO",
+		katakana: "ツォ",
+		pronunciacion: "TZO",
+	},
+	{
+		romaji: "THI",
+		katakana: "ティ",
+		pronunciacion: "TI",
+	},
+	{
+		romaji: "DHI",
+		katakana: "ディ",
+		pronunciacion: "DI",
+	},
+	{
+		romaji: "TWU",
+		katakana: "トゥ",
+	},
+	{
+		romaji: "DWU",
+		katakana: "ドゥ",
+	},
+	{
+		romaji: "SHE",
+		katakana: "シェ",
+	},
+	{
+		romaji: "JE",
+		katakana: "ジェ",
+	},
+	{
+		romaji: "CHE",
+		katakana: "チェ",
+	},
+];
