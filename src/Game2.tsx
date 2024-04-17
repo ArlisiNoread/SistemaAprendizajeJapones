@@ -158,7 +158,9 @@ let Game2: React.FC = () => {
 					): string => {
 						for (let k of listaKanasElegidos.current) {
 							if (romajiABuscarMinuscula === k.romaji) {
-								return k.minusculasHiragana ? k.minusculasHiragana : "";
+								return k.minusculasHiragana
+									? k.minusculasHiragana
+									: "";
 							}
 						}
 						return (
@@ -166,7 +168,7 @@ let Game2: React.FC = () => {
 						);
 					};
 					kanaPorIngresar += buscaMinuscula(
-						romajiPorIngresar[kanaPorIngresar.length - 1]
+						romajiPorIngresar[romajiPorIngresar.length - 1]
 					);
 				} else {
 					kanaPorIngresar += KATAKANA_PROLONGED_SOUND_MARK;
