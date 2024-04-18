@@ -500,18 +500,18 @@ export const Combinaciones: Kana[] = [
 	},
 	{
 		romaji: "CHA",
-		hiragana: "さゃ",
-		katakana: "シャ",
+		hiragana: "ちゃ",
+		katakana: "チャ",
 	},
 	{
 		romaji: "CHU",
-		hiragana: "さゅ",
-		katakana: "シュ",
+		hiragana: "ちゅ",
+		katakana: "チュ",
 	},
 	{
 		romaji: "CHO",
-		hiragana: "さょ",
-		katakana: "ショ",
+		hiragana: "ちょ",
+		katakana: "チョ",
 	},
 	{
 		romaji: "NYA",
