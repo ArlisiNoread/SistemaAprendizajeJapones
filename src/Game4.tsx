@@ -202,9 +202,9 @@ let Game4: React.FC = () => {
 					justifyContent={"center"}
 				>
 					<Grid item xs={12}>
-						<h1>{kanaCombinadoTest? imprimirKanasBonito(kanaCombinadoTest) : "ERROR"}</h1>
+						<h1 style={{transform: "scale(1.3)"}}>{kanaCombinadoTest? imprimirKanasBonito(kanaCombinadoTest) : "ERROR"}</h1>
 						{
-							(kanaCombinadoTest?.pronunciacion && resueltoActual)?<p style={{position: "absolute", left: "-100%", right: "-100%"}}></p>:""
+							(kanaCombinadoTest?.pronunciacion && resueltoActual)?<p style={{position: "absolute", left: "-100%", right: "-100%"}}>{kanaCombinadoTest.pronunciacion}</p>:""
 						}
 						
 					</Grid>
