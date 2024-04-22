@@ -7,6 +7,7 @@ import "./App.css";
 import Game2 from "./Game2";
 import Game3 from "./Game3";
 import Game4 from "./Game4";
+import Game5 from "./Game5";
 
 let appStyles: React.CSSProperties = {
 	height: "100vh",
@@ -28,6 +29,8 @@ function App() {
 				return <Game3 />;
 			case 4:
 				return <Game4 />;
+			case 5:
+				return <Game5 />;
 			default:
 				return <p>Error.</p>;
 		}
@@ -48,6 +51,7 @@ function App() {
 							width: "50vw",
 							height: "50vh",
 							position: "relative",
+							overflow: "unset"
 						}}
 					>
 						{juego !== 0 ? (
@@ -94,6 +98,7 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 				style={{ height: "100%" }}
 				spacing={0}
 				columnGap={5}
+				rowGap={5}
 			>
 				<Grid item>
 					<Button
@@ -114,7 +119,7 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 							setJuego(2);
 						}}
 					>
-						Traducir
+						Frases Aleatorias
 					</Button>
 				</Grid>
 				<Grid item>
@@ -137,6 +142,17 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 						}}
 					>
 						Combinaciones
+					</Button>
+				</Grid>
+				<Grid item>
+					<Button
+						variant="outlined"
+						size="large"
+						onClick={() => {
+							setJuego(5);
+						}}
+					>
+						Traductor Directo
 					</Button>
 				</Grid>
 			</Grid>

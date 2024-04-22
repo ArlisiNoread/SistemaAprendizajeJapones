@@ -1,7 +1,7 @@
 import { Button, Grid, TextField } from "@mui/material";
 import { relative } from "path";
 import React, { useEffect, useRef, useState } from "react";
-import { Kanas, Kana } from "./Kanas";
+import { Kanas, Kana } from "./database/Kanas";
 
 let Game2: React.FC = () => {
 	let [noJuegos, setNoJuegos] = useState<number>(10);

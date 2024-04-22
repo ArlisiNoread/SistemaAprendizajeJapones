@@ -13,7 +13,7 @@ import {
 	KATAKANA_PROLONGED_SOUND_MARK,
 	TSU_FOR_DUPLICATE_VOWEL,
 	Combinaciones,
-} from "./Kanas";
+} from "./database/Kanas";
 
 const probabilidadCombinado = 0.15;
 const probabilidadExtensor = 0.1;

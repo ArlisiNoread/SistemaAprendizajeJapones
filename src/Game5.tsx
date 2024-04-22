@@ -7,31 +7,42 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import {
-	Kana,
-	Combinaciones
-} from "./database/Kanas";
+	Frase,
+	FrasesListaCompleta,
+	ArrayClasificadores,
+	Clasificadores,
+} from "./database/Frases";
 
+type CategoriasAceptadasLista = { [clasificador in Clasificadores]: boolean };
 
+const inicializarCategorias = (): CategoriasAceptadasLista => {
+	let tempCategoriasAceptadasLista = {} as CategoriasAceptadasLista;
+	for (const categoria of ArrayClasificadores) {
+		console.log(categoria);
+		tempCategoriasAceptadasLista[categoria] = true;
+	}
+	return tempCategoriasAceptadasLista;
+};
 
-let Game4: React.FC = () => {
+let Game5: React.FC = () => {
 	let [started, setStarted] = useState<boolean>(false);
 	let [endScreen, setEndScreen] = useState<boolean>(false);
 	let startTime = useRef<number>(0.0);
 	let endTime = useRef<number>(0.0);
-	let [kanaCombinadoTest, setKanaCombinadoTest] = useState<Kana | undefined>();
+	let [fraseTest, setFraseTest] = useState<Frase | undefined>();
 	let [resueltoActual, setResueltoActual] = useState<boolean>(false);
-	let [hiragana, setHiragana] = useState<boolean>(true);
-	let [katakana, setKatakana] = useState<boolean>(true);
-	let listaKanasElegidos = useRef<Kana[]>([]);
+	let listaFrasesElegidas = useRef<Frase[]>([]);
+	let [categoriasAceptadas, setCategoriasAceptadas] =
+		useState<CategoriasAceptadasLista>(inicializarCategorias());
 	let [solucion, setSolucion] = useState<string>("");
+	let [japonesAIngles, setJaponesAingles] = useState<boolean>(true);
 
 	const iniciarJuego = () => {
-		if (!hiragana && !katakana) return;
 		startTime.current = performance.now();
 		setSolucion("");
 		if (endScreen) setEndScreen(false);
-		cargarKanasCombinadosElegidos();
-		siguienteKanaCombinado();
+		cargarFrasesElegidas();
+		siguienteFrase();
 		setStarted(true);
 	};
 
@@ -41,30 +52,34 @@ let Game4: React.FC = () => {
 		setEndScreen(true);
 	};
 
-	const cargarKanasCombinadosElegidos = () => {
-		let tempListaKanasElegidos: Kana[] = [];
-		Combinaciones.forEach((kana) => {
-			if (hiragana && katakana) {
-				tempListaKanasElegidos.push(kana);
-			} else if (hiragana && kana.hiragana) {
-				tempListaKanasElegidos.push(kana);
-			} else if (katakana && kana.katakana) {
-				tempListaKanasElegidos.push(kana);
+	const cargarFrasesElegidas = () => {
+		let tempListaKanasElegidos: Frase[] = [];
+
+		for (const categoria in FrasesListaCompleta) {
+			if (categoriasAceptadas[categoria as Clasificadores]) {
+				FrasesListaCompleta[categoria as Clasificadores].forEach(
+					(frase) => {
+						tempListaKanasElegidos.push(frase);
+					}
+				);
 			}
-		});
-		listaKanasElegidos.current = tempListaKanasElegidos;
+		}
+		listaFrasesElegidas.current = tempListaKanasElegidos;
 	};
 
-	const siguienteKanaCombinado = () => {
+	const siguienteFrase = () => {
 		setSolucion("");
 		setResueltoActual(false);
-		if (listaKanasElegidos.current.length === 0) {
+		if (listaFrasesElegidas.current.length === 0) {
 			finalizarJuego();
 			return;
 		}
-		let randomId = Math.round(Math.random() * (listaKanasElegidos.current.length - 1));
-		let kanaATestear = listaKanasElegidos.current.splice(randomId,1);
-		setKanaCombinadoTest(kanaATestear[0]);
+		let randomId = Math.round(
+			Math.random() * (listaFrasesElegidas.current.length - 1)
+		);
+		let fraseAtestear = listaFrasesElegidas.current.splice(randomId, 1)[0];
+		console.log(fraseAtestear);
+		setFraseTest(fraseAtestear);
 	};
 
 	const getTiempo = (): string => {
@@ -89,7 +104,7 @@ let Game4: React.FC = () => {
 			iniciarJuego();
 		}
 		if (resueltoActual) {
-			siguienteKanaCombinado();
+			siguienteFrase();
 		}
 	};
 	let refPresionarEnter = useRef<Function>(presionarEnter);
@@ -116,27 +131,19 @@ let Game4: React.FC = () => {
 		};
 	}, []);
 
-
-	const imprimirKanasBonito = (kana: Kana):JSX.Element => {
-		if(hiragana && katakana && kana.hiragana && kana.katakana){
-			return (
-				<p><span style={{borderStyle: "solid"}}>{kana.hiragana}</span>&nbsp;&nbsp;&nbsp;<span style={{borderStyle: "solid"}}>{kana.katakana}</span></p>
-			); 
-		}else if(hiragana && kana.hiragana){
-			return <p><span style={{borderStyle: "solid"}}>{kana.hiragana}</span></p>;
-		}else if(katakana && kana.katakana){
-			return <p><span style={{borderStyle: "solid"}}>{kana.katakana}</span></p>;
-		}
-		return <div>"Error Imprimiendo Kana"</div>;
+	const imprimirBonitasLasCategorias = (categoria: string): string => {
+		let categoriaSinSubLineas = categoria.replace("_", " ");
+		let categoriaMayusPrimera = categoriaSinSubLineas[0].toUpperCase() + categoriaSinSubLineas.slice(1);
+		return categoriaMayusPrimera;
 	};
 
-
 	return (
-		<div>
+		<div style={{height: "100%", margin: 0, padding: 0}}>
 			{!started ? (
-				<div style={{ position: "relative" }}>
+				<div style={{ position: "relative", padding: 0, margin: 0, height: "100%"}}>
+					<a style={{position: "absolute", bottom: "0px", left: "5px"}}>Link Referencia</a> 
 					<h1 style={{ textDecoration: "underline" }}>
-						Combinaciones.
+						Traductor Directo.
 					</h1>
 					{endScreen ? (
 						<h2
@@ -156,31 +163,25 @@ let Game4: React.FC = () => {
 						container
 						style={{ marginTop: "6%", padding: "0 20% 0 20%" }}
 					>
-						<Grid item xs={12}>
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={hiragana}
-										onClick={() => {
-											setHiragana(!hiragana);
-										}}
+						<Grid item>
+							{Object.entries(categoriasAceptadas).map(
+								(val) => (
+									<FormControlLabel
+										key={"check_box_" + val[0]}
+										control={
+											<Checkbox
+												checked={val[1]}
+												onClick={() => {
+													let tempCategoriasAceptadas: CategoriasAceptadasLista = {...categoriasAceptadas};
+													tempCategoriasAceptadas[val[0] as Clasificadores] = !val[1];
+													setCategoriasAceptadas(tempCategoriasAceptadas);
+												}}
+											/>
+										}
+										label={imprimirBonitasLasCategorias(val[0])}
 									/>
-								}
-								label="HIRAGANA"
-							/>
-						</Grid>
-						<Grid item xs={12}>
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={katakana}
-										onClick={() => {
-											setKatakana(!katakana);
-										}}
-									/>
-								}
-								label="KATAKANA"
-							/>
+								)
+							)}
 						</Grid>
 					</Grid>
 
@@ -202,11 +203,9 @@ let Game4: React.FC = () => {
 					justifyContent={"center"}
 				>
 					<Grid item xs={12}>
-						<h1 style={{transform: "scale(1.3)"}}>{kanaCombinadoTest? imprimirKanasBonito(kanaCombinadoTest) : "ERROR"}</h1>
-						{
-							(kanaCombinadoTest?.pronunciacion && resueltoActual)?<p style={{position: "absolute", left: "-100%", right: "-100%"}}>{kanaCombinadoTest.pronunciacion}</p>:""
-						}
-						
+						<h1 style={{ transform: "scale(1.3)" }}>
+							{(fraseTest)?(japonesAIngles)? fraseTest.japones : fraseTest.ingles  : "Error"}
+						</h1>
 					</Grid>
 					<Grid
 						item
@@ -219,7 +218,8 @@ let Game4: React.FC = () => {
 					<Grid item xs={12} style={{}}>
 						<FocusableText
 							disabled={resueltoActual}
-							kanaCombinadoTest={kanaCombinadoTest}
+							fraseTest={fraseTest}
+							japonesAIngles={japonesAIngles}
 							setResueltoActual={setResueltoActual}
 							solucion={solucion}
 							setSolucion={setSolucion}
@@ -230,7 +230,7 @@ let Game4: React.FC = () => {
 							style={{ marginTop: "5px" }}
 							size="small"
 							variant="contained"
-							onClick={siguienteKanaCombinado}
+							onClick={siguienteFrase}
 							disabled={!resueltoActual}
 						>
 							Siguiente
@@ -241,11 +241,12 @@ let Game4: React.FC = () => {
 		</div>
 	);
 };
-export default Game4;
+export default Game5;
 
 type PropsFocusabletext = {
 	disabled: boolean;
-	kanaCombinadoTest: Kana | undefined;
+	fraseTest: Frase | undefined;
+	japonesAIngles: boolean;
 	setResueltoActual: React.Dispatch<React.SetStateAction<boolean>>;
 	solucion: string;
 	setSolucion: React.Dispatch<React.SetStateAction<string>>;
@@ -253,10 +254,11 @@ type PropsFocusabletext = {
 
 let FocusableText: React.FC<PropsFocusabletext> = ({
 	disabled,
-	kanaCombinadoTest,
+	fraseTest,
+	japonesAIngles,
 	setResueltoActual,
 	solucion,
-	setSolucion
+	setSolucion,
 }) => {
 	return (
 		<TextField
@@ -266,12 +268,15 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 			style={{ width: "300px" }}
 			disabled={disabled}
 			onChange={(e) => {
-				let txt = e.target.value.trim().toUpperCase();
-				if (kanaCombinadoTest) {
-					console.log(kanaCombinadoTest.romaji);
-					if (txt === kanaCombinadoTest.romaji) setResueltoActual(true);
-					}
-				
+				console.log(fraseTest);
+				if(!fraseTest) return;
+				if(japonesAIngles){
+					let txt = e.target.value.trim().toUpperCase();
+					if(fraseTest.ingles.toUpperCase() === txt) setResueltoActual(true);
+				}else{
+					let txt = e.target.value.trim();
+					if(fraseTest.japones === txt) setResueltoActual(true);
+				}
 				setSolucion(e.target.value);
 			}}
 			value={solucion}
