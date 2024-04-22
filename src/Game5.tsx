@@ -1,8 +1,11 @@
 import {
 	Button,
 	Checkbox,
+	FormControl,
 	FormControlLabel,
 	Grid,
+	MenuItem,
+	Select,
 	TextField,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
@@ -12,13 +15,13 @@ import {
 	ArrayClasificadores,
 	Clasificadores,
 } from "./database/Frases";
+import { url } from "inspector";
 
 type CategoriasAceptadasLista = { [clasificador in Clasificadores]: boolean };
 
 const inicializarCategorias = (): CategoriasAceptadasLista => {
 	let tempCategoriasAceptadasLista = {} as CategoriasAceptadasLista;
 	for (const categoria of ArrayClasificadores) {
-		console.log(categoria);
 		tempCategoriasAceptadasLista[categoria] = true;
 	}
 	return tempCategoriasAceptadasLista;
@@ -35,7 +38,7 @@ let Game5: React.FC = () => {
 	let [categoriasAceptadas, setCategoriasAceptadas] =
 		useState<CategoriasAceptadasLista>(inicializarCategorias());
 	let [solucion, setSolucion] = useState<string>("");
-	let [japonesAIngles, setJaponesAingles] = useState<boolean>(true);
+	let [japonesAIngles, setJaponesAIngles] = useState<boolean>(true);
 
 	const iniciarJuego = () => {
 		startTime.current = performance.now();
@@ -133,15 +136,36 @@ let Game5: React.FC = () => {
 
 	const imprimirBonitasLasCategorias = (categoria: string): string => {
 		let categoriaSinSubLineas = categoria.replace("_", " ");
-		let categoriaMayusPrimera = categoriaSinSubLineas[0].toUpperCase() + categoriaSinSubLineas.slice(1);
+		let categoriaMayusPrimera =
+			categoriaSinSubLineas[0].toUpperCase() +
+			categoriaSinSubLineas.slice(1);
 		return categoriaMayusPrimera;
 	};
 
 	return (
-		<div style={{height: "100%", margin: 0, padding: 0}}>
+		<div style={{ height: "100%", margin: 0, padding: 0 }}>
 			{!started ? (
-				<div style={{ position: "relative", padding: 0, margin: 0, height: "100%"}}>
-					<a style={{position: "absolute", bottom: "0px", left: "5px"}}>Link Referencia</a> 
+				<div
+					style={{
+						position: "relative",
+						padding: 0,
+						margin: 0,
+						height: "100%",
+					}}
+				>
+					<a
+						style={{
+							position: "absolute",
+							bottom: "0px",
+							left: "5px",
+						}}
+						href={
+							"https://github.com/ArlisiNoread/SistemaAprendizajeJapones/blob/master/src/database/Frases.ts"
+						}
+						target="_blank"
+					>
+						Link Referencia
+					</a>
 					<h1 style={{ textDecoration: "underline" }}>
 						Traductor Directo.
 					</h1>
@@ -163,25 +187,50 @@ let Game5: React.FC = () => {
 						container
 						style={{ marginTop: "6%", padding: "0 20% 0 20%" }}
 					>
+						<Grid item xs={12}>
+							<FormControl size="small">
+							<Select
+								labelId="demo-simple-select-standard-label"
+								id="demo-simple-select-standard"
+								value={(japonesAIngles)? 0 : 1}
+								onChange={(e)=>{
+									let seleccion = e.target.value;
+									if(seleccion === 0){
+										setJaponesAIngles(true);
+									}else {
+										setJaponesAIngles(false);
+									}
+								}}
+							>
+								<MenuItem value={0}>Japonés a Inglés</MenuItem>
+								<MenuItem value={1}>Inglés a Japonés</MenuItem>
+							</Select>
+							</FormControl>
+						</Grid>
 						<Grid item>
-							{Object.entries(categoriasAceptadas).map(
-								(val) => (
-									<FormControlLabel
-										key={"check_box_" + val[0]}
-										control={
-											<Checkbox
-												checked={val[1]}
-												onClick={() => {
-													let tempCategoriasAceptadas: CategoriasAceptadasLista = {...categoriasAceptadas};
-													tempCategoriasAceptadas[val[0] as Clasificadores] = !val[1];
-													setCategoriasAceptadas(tempCategoriasAceptadas);
-												}}
-											/>
-										}
-										label={imprimirBonitasLasCategorias(val[0])}
-									/>
-								)
-							)}
+							{Object.entries(categoriasAceptadas).sort((a , b)=>{
+								return (a[0] < b[0]? -1 : (a[0] > b[0])? 1 : 0);
+							}).map((val) => (
+								<FormControlLabel
+									key={"check_box_" + val[0]}
+									control={
+										<Checkbox
+											checked={val[1]}
+											onClick={() => {
+												let tempCategoriasAceptadas: CategoriasAceptadasLista =
+													{ ...categoriasAceptadas };
+												tempCategoriasAceptadas[
+													val[0] as Clasificadores
+												] = !val[1];
+												setCategoriasAceptadas(
+													tempCategoriasAceptadas
+												);
+											}}
+										/>
+									}
+									label={imprimirBonitasLasCategorias(val[0])}
+								/>
+							))}
 						</Grid>
 					</Grid>
 
@@ -203,8 +252,12 @@ let Game5: React.FC = () => {
 					justifyContent={"center"}
 				>
 					<Grid item xs={12}>
-						<h1 style={{ transform: "scale(1.3)" }}>
-							{(fraseTest)?(japonesAIngles)? fraseTest.japones : fraseTest.ingles  : "Error"}
+						<h1 style={{ transform: "scale(1.1)" }}>
+							{fraseTest
+								? japonesAIngles
+									? fraseTest.japones
+									: fraseTest.ingles
+								: "Error"}
 						</h1>
 					</Grid>
 					<Grid
@@ -269,13 +322,14 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 			disabled={disabled}
 			onChange={(e) => {
 				console.log(fraseTest);
-				if(!fraseTest) return;
-				if(japonesAIngles){
+				if (!fraseTest) return;
+				if (japonesAIngles) {
 					let txt = e.target.value.trim().toUpperCase();
-					if(fraseTest.ingles.toUpperCase() === txt) setResueltoActual(true);
-				}else{
+					if (fraseTest.ingles.toUpperCase() === txt)
+						setResueltoActual(true);
+				} else {
 					let txt = e.target.value.trim();
-					if(fraseTest.japones === txt) setResueltoActual(true);
+					if (fraseTest.japones === txt) setResueltoActual(true);
 				}
 				setSolucion(e.target.value);
 			}}
