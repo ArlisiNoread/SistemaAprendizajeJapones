@@ -32,10 +32,10 @@ export const Generic: Frase[] = [
 		japones: "あと",
 		ingles: "Later",
 	},
-    {
-        japones: "おめでとうございます",
-        ingles: "Congratulations"
-    }
+	{
+		japones: "おめでとうございます",
+		ingles: "Congratulations",
+	},
 ];
 
 export const Good_maners: Frase[] = [

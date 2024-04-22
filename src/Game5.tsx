@@ -144,6 +144,20 @@ let Game5: React.FC = () => {
 
 	return (
 		<div style={{ height: "100%", margin: 0, padding: 0 }}>
+			<a
+				style={{
+					position: "absolute",
+					bottom: "0px",
+					left: "5px",
+					zIndex: "100"
+				}}
+				href={
+					"https://github.com/ArlisiNoread/SistemaAprendizajeJapones/blob/master/src/database/Frases.ts"
+				}
+				target="_blank"
+			>
+				Link Referencia
+			</a>
 			{!started ? (
 				<div
 					style={{
@@ -153,19 +167,6 @@ let Game5: React.FC = () => {
 						height: "100%",
 					}}
 				>
-					<a
-						style={{
-							position: "absolute",
-							bottom: "0px",
-							left: "5px",
-						}}
-						href={
-							"https://github.com/ArlisiNoread/SistemaAprendizajeJapones/blob/master/src/database/Frases.ts"
-						}
-						target="_blank"
-					>
-						Link Referencia
-					</a>
 					<h1 style={{ textDecoration: "underline" }}>
 						Traductor Directo.
 					</h1>
@@ -189,48 +190,62 @@ let Game5: React.FC = () => {
 					>
 						<Grid item xs={12}>
 							<FormControl size="small">
-							<Select
-								labelId="demo-simple-select-standard-label"
-								id="demo-simple-select-standard"
-								value={(japonesAIngles)? 0 : 1}
-								onChange={(e)=>{
-									let seleccion = e.target.value;
-									if(seleccion === 0){
-										setJaponesAIngles(true);
-									}else {
-										setJaponesAIngles(false);
-									}
-								}}
-							>
-								<MenuItem value={0}>Japonés a Inglés</MenuItem>
-								<MenuItem value={1}>Inglés a Japonés</MenuItem>
-							</Select>
+								<Select
+									labelId="demo-simple-select-standard-label"
+									id="demo-simple-select-standard"
+									value={japonesAIngles ? 0 : 1}
+									onChange={(e) => {
+										let seleccion = e.target.value;
+										if (seleccion === 0) {
+											setJaponesAIngles(true);
+										} else {
+											setJaponesAIngles(false);
+										}
+									}}
+								>
+									<MenuItem value={0}>
+										Japonés a Inglés
+									</MenuItem>
+									<MenuItem value={1}>
+										Inglés a Japonés
+									</MenuItem>
+								</Select>
 							</FormControl>
 						</Grid>
 						<Grid item>
-							{Object.entries(categoriasAceptadas).sort((a , b)=>{
-								return (a[0] < b[0]? -1 : (a[0] > b[0])? 1 : 0);
-							}).map((val) => (
-								<FormControlLabel
-									key={"check_box_" + val[0]}
-									control={
-										<Checkbox
-											checked={val[1]}
-											onClick={() => {
-												let tempCategoriasAceptadas: CategoriasAceptadasLista =
-													{ ...categoriasAceptadas };
-												tempCategoriasAceptadas[
-													val[0] as Clasificadores
-												] = !val[1];
-												setCategoriasAceptadas(
-													tempCategoriasAceptadas
-												);
-											}}
-										/>
-									}
-									label={imprimirBonitasLasCategorias(val[0])}
-								/>
-							))}
+							{Object.entries(categoriasAceptadas)
+								.sort((a, b) => {
+									return a[0] < b[0]
+										? -1
+										: a[0] > b[0]
+										? 1
+										: 0;
+								})
+								.map((val) => (
+									<FormControlLabel
+										key={"check_box_" + val[0]}
+										control={
+											<Checkbox
+												checked={val[1]}
+												onClick={() => {
+													let tempCategoriasAceptadas: CategoriasAceptadasLista =
+														{
+															...categoriasAceptadas,
+														};
+													tempCategoriasAceptadas[
+														val[0] as Clasificadores
+													] = !val[1];
+													setCategoriasAceptadas(
+														tempCategoriasAceptadas
+													);
+												}}
+											/>
+										}
+										label={imprimirBonitasLasCategorias(
+											val[0]
+										)}
+									/>
+								))}
 						</Grid>
 					</Grid>
 
