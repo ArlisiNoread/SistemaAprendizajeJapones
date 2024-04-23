@@ -65,7 +65,7 @@ export const Good_maners: Frase[] = [
 	},
 	{
 		japones: "よろしくおねがいします",
-		ingles: "It's nice to meet you, please treat me favorably",
+		ingles: "It's nice to meet you",
 	},
 	{
 		japones: "おはよう",
