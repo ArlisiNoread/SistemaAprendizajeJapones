@@ -13,7 +13,7 @@ export type Frases = {
 
 export const Generic: Frase[] = [
 	{
-		japones: "ようこゆういそ",
+		japones: "ようこそ",
 		ingles: "Welcome",
 	},
 	{
