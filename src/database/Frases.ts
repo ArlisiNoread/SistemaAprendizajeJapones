@@ -49,7 +49,7 @@ export const Good_maners: Frase[] = [
 	},
 	{
 		japones: "わたしはなまえでつ",
-		ingles: "I am namae",
+		ingles: "I'm namae",
 	},
 	{
 		japones: "わたしのなまえはなまえです",
@@ -101,7 +101,7 @@ export const Good_maners: Frase[] = [
 	},
 	{
 		japones: "げんきです",
-		ingles: "I am fine",
+		ingles: "I'm fine",
 	},
 	{
 		japones: "ナマエさんは?",
