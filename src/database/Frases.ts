@@ -38,7 +38,7 @@ export const Generic: Frase[] = [
 	},
 	{
 		japones: "ワイン",
-		ingles: "Vino",
+		ingles: "Wine",
 	},
 	
 ];
@@ -85,10 +85,6 @@ export const Greetings: Frase[] = [
 		ingles: "Good morning",
 	},
 	{
-		japones: "こんにちわ",
-		ingles: "Good afternoon",
-	},
-	{
 		japones: "こんばんは",
 		ingles: "Good evening",
 	},
@@ -114,7 +110,7 @@ export const Greetings: Frase[] = [
 	},
 	{
 		japones: "カカシさんは?",
-		ingles: "And you Kakashi?",
+		ingles: "Are you Kakashi?",
 	},
 	{
 		japones: "さようなら",
@@ -137,7 +133,7 @@ export const Greetings: Frase[] = [
 		ingles: "See you",
 	},
 	{
-		japones: "またあとです",
+		japones: "またあとでね",
 		ingles: "See you later",
 	},
 ];
