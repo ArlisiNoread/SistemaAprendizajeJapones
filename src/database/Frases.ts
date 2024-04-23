@@ -3,7 +3,11 @@ export type Frase = {
 	ingles: string;
 };
 
-export const ArrayClasificadores = ["good_maners", "generic"] as const;
+export const ArrayClasificadores = [
+	"generic",
+	"greetings",
+	"good_maners",
+] as const;
 
 export type Clasificadores = (typeof ArrayClasificadores)[number];
 
@@ -12,10 +16,6 @@ export type Frases = {
 };
 
 export const Generic: Frase[] = [
-	{
-		japones: "ようこそ",
-		ingles: "Welcome",
-	},
 	{
 		japones: "れんしゅう",
 		ingles: "Practice",
@@ -36,9 +36,18 @@ export const Generic: Frase[] = [
 		japones: "おめでとうございます",
 		ingles: "Congratulations",
 	},
+	{
+		japones: "ワイン",
+		ingles: "Vino",
+	},
+	
 ];
 
-export const Good_maners: Frase[] = [
+export const Greetings: Frase[] = [
+	{
+		japones: "ようこそ",
+		ingles: "Welcome",
+	},
 	{
 		japones: "あいさつ",
 		ingles: "Greetings",
@@ -133,7 +142,27 @@ export const Good_maners: Frase[] = [
 	},
 ];
 
+export const Good_maners: Frase[] = [
+	{
+		japones: "おねがいします",
+		ingles: "Please"
+	},
+	{
+		japones: "ワインをおねがいします",
+		ingles: "Wine please"
+	},
+	{
+		japones: "もういちどうねがいします",
+		ingles: "One more time please"
+	},
+	{
+		japones: "よろしくおねがいします",
+		ingles: "Treat me favorably"
+	},
+];
+
 export const FrasesListaCompleta: Frases = {
-	good_maners: Good_maners,
 	generic: Generic,
+	greetings: Greetings,
+	good_maners: Good_maners,
 };
