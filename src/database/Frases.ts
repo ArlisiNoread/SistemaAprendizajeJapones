@@ -48,12 +48,12 @@ export const Good_maners: Frase[] = [
 		ingles: "Good afternoon",
 	},
 	{
-		japones: "わたしはなまえでつ",
-		ingles: "I'm namae",
+		japones: "わたしはナルトでつ",
+		ingles: "I'm Naruto",
 	},
 	{
-		japones: "わたしのなまえはなまえです",
-		ingles: "My name is namae",
+		japones: "わたしのなまえはヒナタです",
+		ingles: "My name is Hinata",
 	},
 	{
 		japones: "おなまえわなんでつか",
@@ -104,8 +104,8 @@ export const Good_maners: Frase[] = [
 		ingles: "I'm fine",
 	},
 	{
-		japones: "ナマエさんは?",
-		ingles: "And you Namae?",
+		japones: "カカシさんは?",
+		ingles: "And you Kakashi?",
 	},
 	{
 		japones: "さようなら",
