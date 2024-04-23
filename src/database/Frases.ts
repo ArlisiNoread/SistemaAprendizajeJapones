@@ -151,10 +151,6 @@ export const Good_maners: Frase[] = [
 		japones: "もういちどうねがいします",
 		ingles: "One more time please"
 	},
-	{
-		japones: "よろしくおねがいします",
-		ingles: "Treat me favorably"
-	},
 ];
 
 export const FrasesListaCompleta: Frases = {
