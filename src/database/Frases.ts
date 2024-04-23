@@ -73,7 +73,7 @@ export const Good_maners: Frase[] = [
 	},
 	{
 		japones: "おはようございます",
-		ingles: "Formal good morning",
+		ingles: "Good morning",
 	},
 	{
 		japones: "こんにちわ",
@@ -89,7 +89,7 @@ export const Good_maners: Frase[] = [
 	},
 	{
 		japones: "おやすみなさい",
-		ingles: "Formal good night",
+		ingles: "Good night",
 	},
 	{
 		japones: "おひさしぶいです",
