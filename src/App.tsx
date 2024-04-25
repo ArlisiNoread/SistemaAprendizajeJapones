@@ -9,6 +9,8 @@ import Game3 from "./Game3";
 import Game4 from "./Game4";
 import Game5 from "./Game5";
 import Game6 from "./Game6";
+import nekoImg from "./img/random/neko.png";
+import "animate.css";
 
 let appStyles: React.CSSProperties = {
 	height: "100vh",
@@ -79,6 +81,7 @@ function App() {
 					</Card>
 				</Grid>
 			</Grid>
+			<Neko />
 		</div>
 	);
 }
@@ -90,8 +93,8 @@ type PropsInicio = {
 
 let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 	return (
-		<div style={{ height: "100%" }}>
-			<h1 style={{ position: "absolute", left: "-100%", right: "-100%" }}>
+		<div style={{ height: "100%", position: "relative" }}>
+			<h1 style={{ position: "absolute", left: "-50%", right: "-50%" }}>
 				Selección de Juegos.
 			</h1>
 			<Grid
@@ -170,6 +173,73 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 					</Button>
 				</Grid>
 			</Grid>
+		</div>
+	);
+};
+
+const Neko: React.FC = () => {
+	const tiempoEntreAzar = 10000;
+	const probabilidadDeGato = 0.01;
+	const delayDelGato: number = 2500;
+	const tiempoGatoObservando: number = 3500 + delayDelGato;
+	const tiempoParaInvisibleDeNuevo: number =
+		2 * delayDelGato + tiempoGatoObservando + 500;
+	const [gato, setGato] = useState<boolean>(false);
+	const [gatoVisible, setGatoVisible] = useState<boolean>(false);
+	const refGato = useRef<
+		[boolean, React.Dispatch<React.SetStateAction<boolean>>]
+	>([gato, setGato]);
+	const refGatoVisible = useRef<
+		[boolean, React.Dispatch<React.SetStateAction<boolean>>]
+	>([gatoVisible, setGatoVisible]);
+	useEffect(() => {
+		refGato.current = [gato, setGato];
+		refGatoVisible.current = [gatoVisible, setGatoVisible];
+	});
+
+	useEffect(() => {
+		if (gatoVisible) {
+			const permitirAGatoObservar = setTimeout(() => {
+				refGato.current[1](false);
+			}, tiempoGatoObservando);
+			const volverGatoInvisible = setTimeout(() => {
+				refGatoVisible.current[1](false);
+			}, tiempoParaInvisibleDeNuevo);
+			return () => {
+				clearTimeout(permitirAGatoObservar);
+				clearTimeout(volverGatoInvisible);
+			};
+		}
+	}, [gatoVisible]);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (!refGatoVisible.current[0]) {
+				if (Math.random() <= probabilidadDeGato) {
+					refGatoVisible.current[1](true);
+					refGato.current[1](true);
+				}
+			}
+		}, tiempoEntreAzar);
+		return () => clearInterval(interval);
+	}, []);
+
+	const translate = (): string => {
+		return gato ? "translate(0px, 0vh)" : "translate(0px, 35vh)";
+	};
+
+	return (
+		<div
+			style={{
+				visibility: gatoVisible ? "visible" : "hidden",
+				position: "fixed",
+				bottom: "-1vh",
+				left: "0",
+				transition: "transform 2s",
+				transform: translate(),
+			}}
+		>
+			<img src={nekoImg} style={{ height: "30vh" }} />
 		</div>
 	);
 };

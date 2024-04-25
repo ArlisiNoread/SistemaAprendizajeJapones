@@ -21,7 +21,7 @@ const BaseNumeros: Numeros = {
 
 //Números en el rango [1, 1000000]
 export const numeroAKana = (numero: number): string => {
-	if (Math.trunc(numero) != numero) return "Solo enteros";
+	if (Math.trunc(numero) !== numero) return "Solo enteros";
     if (numero === 0) return BaseNumeros[0];
 	let ret = recursiveNumberKana(numero);
     ret = ret.replaceAll("さんひゃ","さんびゃ");
