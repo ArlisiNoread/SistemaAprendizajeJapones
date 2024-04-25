@@ -35,6 +35,8 @@ let Game6: React.FC = () => {
 	let [kanaAArabigos, setKanaAArabigos] = useState<boolean>(true);
 	let [numeroJuegos, setNumeroJuegos] = useState<number>(10);
 	let [traductor, setTraductor] = useState<number>(0);
+	let seleccionado = useRef<boolean>(true);
+
 	const iniciarJuego = () => {
 		startTime.current = performance.now();
 		setSolucion("");
@@ -89,6 +91,7 @@ let Game6: React.FC = () => {
 	};
 
 	const siguienteNumero = () => {
+		seleccionado.current = true;
 		setSolucion("");
 		setResueltoActual(false);
 		if (listaNumeros.current.length === 0) {
@@ -152,38 +155,48 @@ let Game6: React.FC = () => {
 		};
 	}, []);
 
-	useEffect(()=>{
+	useEffect(() => {
 		revisarYAjustarJuegos();
-	},[rango]);
-	
+	}, [rango]);
+
 	const revisarYAjustarJuegos = () => {
 		let diferencia = 1 + rango[1] - rango[0];
-		if(numeroJuegos > diferencia ){
+		if (numeroJuegos > diferencia) {
 			setNumeroJuegos(diferencia);
 		}
-	}
-
-
+	};
 
 	return (
 		<div style={{ height: "100%", margin: 0, padding: 0 }}>
-			<div style={{position: 'fixed', bottom: "0", left: "-100%", right:"-100%"}}>
+			<div
+				style={{
+					position: "fixed",
+					bottom: "0",
+					left: "-100%",
+					right: "-100%",
+				}}
+			>
 				<p>Traductor</p>
-				<input 
+				<input
 					value={traductor}
-					onChange={(e)=>{
+					onChange={(e) => {
 						let txt = e.target.value;
-						if(txt.length === 0){
+						if (txt.length === 0) {
 							setTraductor(0);
 							return;
 						}
-						if(parseInt(txt) > 999999999999999 || txt.includes('-')){
+						if (
+							parseInt(txt) > 999999999999999 ||
+							txt.includes("-")
+						) {
 							return;
 						}
 						setTraductor(parseInt(txt));
 					}}
 				/>
-				<p><b>{numeroAKana(traductor)}</b></p>
+				<p>
+					<b>{numeroAKana(traductor)}</b>
+				</p>
 			</div>
 			{!started ? (
 				<div
@@ -250,17 +263,20 @@ let Game6: React.FC = () => {
 								style={{ width: "100px" }}
 								inputMode="numeric"
 								onChange={(e) => {
-									if(e.target.value.includes('-')) return;
-									if(e.target.value.length === 0){ setNumeroJuegos(1); return;};
-									let juegos = parseInt(e.target.value);
-									if(juegos <= 0){
+									if (e.target.value.includes("-")) return;
+									if (e.target.value.length === 0) {
 										setNumeroJuegos(1);
 										return;
 									}
-									let diferencia = 1+rango[1]-rango[0];
-									if(juegos > diferencia){
+									let juegos = parseInt(e.target.value);
+									if (juegos <= 0) {
+										setNumeroJuegos(1);
+										return;
+									}
+									let diferencia = 1 + rango[1] - rango[0];
+									if (juegos > diferencia) {
 										setNumeroJuegos(diferencia);
-										return;	
+										return;
 									}
 									setNumeroJuegos(juegos);
 								}}
@@ -275,14 +291,17 @@ let Game6: React.FC = () => {
 								style={{ width: "100px" }}
 								inputMode="numeric"
 								onChange={(e) => {
-									if(e.target.value.includes('-')) return;
-									if(e.target.value.length === 0){ setRango([0, rango[1]]); return;};
+									if (e.target.value.includes("-")) return;
+									if (e.target.value.length === 0) {
+										setRango([0, rango[1]]);
+										return;
+									}
 									let rangoIzq = parseInt(e.target.value);
 
-									if(rangoIzq < 0) return;
+									if (rangoIzq < 0) return;
 
 									let rangoDerActual = rango[1];
-									if(rangoIzq >= rangoDerActual){
+									if (rangoIzq >= rangoDerActual) {
 										rangoIzq = rangoDerActual - 1;
 									}
 
@@ -299,11 +318,14 @@ let Game6: React.FC = () => {
 								style={{ width: "100px" }}
 								inputMode="numeric"
 								onChange={(e) => {
-									if(e.target.value.includes('-')) return;
-									if(e.target.value.length === 0){ setRango([rango[0], rango[0]+1]); return;};
+									if (e.target.value.includes("-")) return;
+									if (e.target.value.length === 0) {
+										setRango([rango[0], rango[0] + 1]);
+										return;
+									}
 									let rangoDer = parseInt(e.target.value);
 									let rangoIzqActual = rango[0];
-									if(rangoDer <= rangoIzqActual){
+									if (rangoDer <= rangoIzqActual) {
 										rangoDer = rangoIzqActual + 1;
 									}
 
@@ -356,6 +378,7 @@ let Game6: React.FC = () => {
 							setResueltoActual={setResueltoActual}
 							solucion={solucion}
 							setSolucion={setSolucion}
+							seleccionado={seleccionado}
 						></FocusableText>
 					</Grid>
 					<Grid item xs={12} style={{}}>
@@ -383,6 +406,7 @@ type PropsFocusabletext = {
 	setResueltoActual: React.Dispatch<React.SetStateAction<boolean>>;
 	solucion: string;
 	setSolucion: React.Dispatch<React.SetStateAction<string>>;
+	seleccionado: React.MutableRefObject<boolean>;
 };
 
 let FocusableText: React.FC<PropsFocusabletext> = ({
@@ -392,8 +416,8 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 	setResueltoActual,
 	solucion,
 	setSolucion,
+	seleccionado
 }) => {
-
 	return (
 		<TextField
 			label="Solución"
@@ -401,13 +425,13 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 			size="small"
 			style={{ width: "300px" }}
 			disabled={disabled}
-			inputProps={{inputMode: (kanaAArabigos? "numeric" : "text")}}
+			inputProps={{ inputMode: kanaAArabigos ? "numeric" : "text" }}
 			onChange={(e) => {
 				console.log(numeroTest);
 				if (!numeroTest) return;
 				let txt = e.target.value.trim();
 				if (kanaAArabigos) {
-					if (("" + numeroTest.arabigo) === txt)
+					if ("" + numeroTest.arabigo === txt)
 						setResueltoActual(true);
 				} else {
 					if (numeroTest.kanas === txt) setResueltoActual(true);
@@ -415,7 +439,16 @@ let FocusableText: React.FC<PropsFocusabletext> = ({
 				setSolucion(e.target.value);
 			}}
 			value={solucion}
-			inputRef={(input) => input && input.focus()}
+			inputRef={(input) => {
+				if(input && seleccionado.current){					
+					input.focus();
+				}	
+			}}
+			onBlurCapture={
+				()=>{
+					seleccionado.current = false;
+				}
+			}
 		/>
 	);
 };
