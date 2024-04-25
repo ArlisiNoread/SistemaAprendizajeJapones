@@ -8,6 +8,7 @@ import Game2 from "./Game2";
 import Game3 from "./Game3";
 import Game4 from "./Game4";
 import Game5 from "./Game5";
+import Game6 from "./Game6";
 
 let appStyles: React.CSSProperties = {
 	height: "100vh",
@@ -31,6 +32,8 @@ function App() {
 				return <Game4 />;
 			case 5:
 				return <Game5 />;
+			case 6:
+				return <Game6 />;
 			default:
 				return <p>Error.</p>;
 		}
@@ -51,7 +54,7 @@ function App() {
 							width: "50vw",
 							height: "50vh",
 							position: "relative",
-							overflow: "unset"
+							overflow: "unset",
 						}}
 					>
 						{juego !== 0 ? (
@@ -153,6 +156,17 @@ let Inicio: React.FC<PropsInicio> = ({ setJuego }) => {
 						}}
 					>
 						Traductor Directo
+					</Button>
+				</Grid>
+				<Grid item>
+					<Button
+						variant="outlined"
+						size="large"
+						onClick={() => {
+							setJuego(6);
+						}}
+					>
+						Traductor Números
 					</Button>
 				</Grid>
 			</Grid>
