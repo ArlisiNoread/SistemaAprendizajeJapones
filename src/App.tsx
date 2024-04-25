@@ -10,7 +10,6 @@ import Game4 from "./Game4";
 import Game5 from "./Game5";
 import Game6 from "./Game6";
 import nekoImg from "./img/random/neko.png";
-import "animate.css";
 
 let appStyles: React.CSSProperties = {
 	height: "100vh",
